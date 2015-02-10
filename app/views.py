@@ -2,8 +2,8 @@ from flask import render_template
 from flask.ext.appbuilder import BaseView, expose, has_access
 from app import appbuilder
 
-class MyView(BaseView):
 
+class MyView(BaseView):
     default_view = 'method1'
 
     @expose('/method1/')
@@ -11,7 +11,20 @@ class MyView(BaseView):
     def method1(self):
         # do something with param1
         # and return to previous page or index
-        return 'Hello'
+        from sqlalchemy import Table, Column, Integer, String, MetaData, ForeignKey
+
+        metadata = MetaData()
+        Color = Table('Color', metadata,
+                      Column('color', String))
+
+        from sqlalchemy import create_engine, select
+
+        engine = create_engine('postgresql+pg8000://postgres:postgres@localhost:5432/movedb')
+        conn = engine.connect()
+        s = select([Color])
+        result = conn.execute(s)
+
+        return 'Hello' + str(result)
 
     @expose('/method2/<string:param1>')
     @has_access
@@ -32,7 +45,7 @@ class MyView(BaseView):
 
 
 appbuilder.add_view(MyView(), "Method1", category='My View')
-#appbuilder.add_view(MyView(), "Method2", href='/myview/method2/jonh', category='My View')
+# appbuilder.add_view(MyView(), "Method2", href='/myview/method2/jonh', category='My View')
 # Use add link instead there is no need to create MyView twice.
 appbuilder.add_link("Method2", href='/myview/method2/jonh', category='My View')
 appbuilder.add_link("Method3", href='/myview/method3/jonh', category='My View')

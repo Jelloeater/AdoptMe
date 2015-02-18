@@ -2,7 +2,7 @@ __author__ = 'Jesse'
 
 # from sqlalchemy.dialects.postgresql import \
 # ARRAY, BIGINT, BIT, BOOLEAN, BYTEA, CHAR, CIDR, DATE, \
-#     DOUBLE_PRECISION, ENUM, FLOAT, HSTORE, INET, INTEGER, \
+# DOUBLE_PRECISION, ENUM, FLOAT, HSTORE, INET, INTEGER, \
 #     INTERVAL, JSON, JSONB, MACADDR, NUMERIC, OID, REAL, SMALLINT, TEXT, \
 #     TIME, TIMESTAMP, UUID, VARCHAR, INT4RANGE, INT8RANGE, NUMRANGE, \
 #     DATERANGE, TSRANGE, TSTZRANGE, TSVECTOR
@@ -15,9 +15,12 @@ engine = create_engine('postgresql+pg8000://postgres:postgres@localhost:5432/tes
 
 metadata = MetaData()
 
-PaymentTypes = Table('Payment_Types', metadata,
-                     Column('payment_type', String, length=10, primary_key=True),
-                     Column('is_credit_card', Boolean))
+Payment_Types = Table('Payment_Types', metadata,
+                      Column('payment_type', String, length=10, primary_key=True),
+                      Column('is_credit_card', Boolean))
+
+US_States = Table('US_States', metadata,
+                  Column('state', String, length=2, primary_key=True))
 
 Payments = Table('Payments', metadata,
                  Column('payment_ID', Integer, primary_key=True),
@@ -29,7 +32,16 @@ Payments = Table('Payments', metadata,
 Person = Table('Person', metadata,
                Column('person_ID', Integer, primary_key=True),
                Column('last_name', String, length=32),
-               Column('first_name', String, length=32),
-               Column('first_name', String, length=32)
+               Column('first_name', String, length=16),
+               Column('address', String, length=32),
+               Column('address2', String, length=32),
+               Column('city', String, length=32),
+               Column('state', None, ForeignKey('US_States.state')),
+               Column('zip', String, length=32),
+               Column('home_phone', String, length=32),
+               Column('work_phone', String, length=32),
+               Column('mobile_phone', String, length=32),
+               Column('email', String, length=32)
+
 
 )

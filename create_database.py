@@ -16,11 +16,11 @@ engine = create_engine('postgresql+pg8000://postgres:postgres@localhost:5432/tes
 metadata = MetaData()
 
 Payment_Types = Table('Payment_Types', metadata,
-                      Column('payment_type', String, length=10, primary_key=True),
+                      Column('payment_type', String(10), primary_key=True),
                       Column('is_credit_card', Boolean))
 
 US_States = Table('US_States', metadata,
-                  Column('state', String, length=2, primary_key=True))
+                  Column('state', String(2), primary_key=True))
 
 Payments = Table('Payments', metadata,
                  Column('payment_ID', Integer, primary_key=True),
@@ -31,17 +31,15 @@ Payments = Table('Payments', metadata,
 
 Person = Table('Person', metadata,
                Column('person_ID', Integer, primary_key=True),
-               Column('last_name', String, length=32),
-               Column('first_name', String, length=16),
-               Column('address', String, length=32),
-               Column('address2', String, length=32),
-               Column('city', String, length=32),
+               Column('last_name', String(32)),
+               Column('first_name', String(16)),
+               Column('address', String(32)),
+               Column('address2', String(32)),
+               Column('city', String(32)),
                Column('state', None, ForeignKey('US_States.state')),
-               Column('zip', String, length=32),
-               Column('home_phone', String, length=32),
-               Column('work_phone', String, length=32),
-               Column('mobile_phone', String, length=32),
-               Column('email', String, length=32)
-
-
+               Column('zip', String(32)),
+               Column('home_phone', String(32)),
+               Column('work_phone', String(32)),
+               Column('mobile_phone', String(32)),
+               Column('email', String(32))
 )

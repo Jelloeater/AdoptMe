@@ -9,7 +9,7 @@ __author__ = 'Jesse'
 #     http://docs.sqlalchemy.org/en/rel_0_9/core/tutorial.html
 
 
-from sqlalchemy import Table, Column, Integer, String, Boolean, Numeric, DateTime, ForeignKey, create_engine, MetaData
+from sqlalchemy import Table, Column, Integer, String, Boolean, Numeric, TIMESTAMP, ForeignKey, create_engine, MetaData
 
 engine = create_engine('postgresql+pg8000://postgres:postgres@localhost:5432/testdb')
 
@@ -17,7 +17,7 @@ metadata = MetaData()
 
 Payment_Types = Table('Payment_Types', metadata,
                       Column('payment_type', String(10), primary_key=True),
-                      Column('is_credit_card', Boolean))
+                      Column('is_credit_card', Boolean, nullable=False))
 
 US_States = Table('US_States', metadata,
                   Column('state', String(2), primary_key=True))
@@ -26,20 +26,23 @@ Payments = Table('Payments', metadata,
                  Column('payment_ID', Integer, primary_key=True),
                  Column('person_ID', None, ForeignKey('Person.person_ID')),
                  Column('payment_type', None, ForeignKey('Payment_Types.payment_type')),
-                 Column('timestamp', DateTime),
-                 Column('amount', Numeric))
+                 Column('timestamp', TIMESTAMP),
+                 Column('amount', Numeric, nullable=False)
+)
 
 Person = Table('Person', metadata,
                Column('person_ID', Integer, primary_key=True),
-               Column('last_name', String(32)),
-               Column('first_name', String(16)),
-               Column('address', String(32)),
+               Column('last_name', String(32), nullable=False),
+               Column('first_name', String(16),nullable=False),
+               Column('address', String(32), nullable=False),
                Column('address2', String(32)),
-               Column('city', String(32)),
-               Column('state', None, ForeignKey('US_States.state')),
-               Column('zip', String(32)),
-               Column('home_phone', String(32)),
+               Column('city', String(32), nullable=False),
+               Column('state', None, ForeignKey('US_States.state'), nullable=False),
+               Column('zip', String(10), nullable=False),
+               Column('home_phone', String(32), nullable=False),
                Column('work_phone', String(32)),
                Column('mobile_phone', String(32)),
                Column('email', String(32))
 )
+metadata.drop_all(engine)
+metadata.create_all(engine)

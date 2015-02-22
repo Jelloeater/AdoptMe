@@ -9,7 +9,8 @@ __author__ = 'Jesse'
 # http://docs.sqlalchemy.org/en/rel_0_9/core/tutorial.html
 
 
-from sqlalchemy import Table, Column, Integer, String, Boolean, Numeric, TIMESTAMP, ForeignKey, create_engine, MetaData
+from sqlalchemy import Table, Column, Integer, String, Boolean, Numeric, SmallInteger, TIMESTAMP, ForeignKey, \
+    create_engine, MetaData, Date
 
 engine = create_engine('postgresql+pg8000://postgres:postgres@localhost:5432/testdb')
 
@@ -41,7 +42,43 @@ Person = Table('Person', metadata,
                Column('home_phone', String(22), nullable=False),
                Column('work_phone', String(22)),
                Column('mobile_phone', String(22)),
-               Column('email', String(50)))
+               Column('email', String(50)),
+               Column('memo', String(200)))
+
+Adoption = Table('Adoption', metadata,
+                 Column('adoption_ID', Integer, primary_key=True),
+                 Column('animal_ID', None, ForeignKey('Animal.animal_ID'), nullable=False),
+                 Column('person_ID', None, ForeignKey('Person.person_ID'), nullable=False),
+                 Column('is_foster', Boolean, nullable=False),
+                 Column('timestamp', TIMESTAMP, nullable=False),
+                 Column('memo', String(200)))
+
+Animal = Table('Animal', metadata,
+               Column('animal_ID', Integer, primary_key=True),
+               Column('animal_name', String(32), nullable=False),
+               Column('vet_ID', None, ForeignKey('Vet.vet_ID'), nullable=False),
+               Column('breed_id', None, ForeignKey('Breed.breed_ID')),
+               Column('sex', SmallInteger, nullable=False),
+               # 0 = not known, 1 = male, 2 = female, 9 = not applicable
+               Column('color', String(32), nullable=False),
+               Column('spay_nut', Boolean, nullable=False),
+               Column('spay_nut_date', Date, nullable=False),
+               Column('dh_date', Date),
+               Column('hwt_date', Date),
+               Column('rabies_date', Date),
+               Column('fvrcp_date', Date),
+               Column('leuk_date', Date),
+               Column('stool_date', Date),
+               Column('stool_result', String(32)),
+               Column('heart_guard_date', Date),
+               Column('has_aids', Boolean),
+               Column('death_date', Date),
+               Column('memo', String(200)))
+
+Breed = Table('Breed', metadata,
+              Column('breed_ID', Integer, primary_key=True),
+              Column('type', String(32)),  # Dog, Cat, Etc
+              Column('breed', String(32)))
 
 Vet = Table('Vet', metadata,
             Column('vet_ID', Integer, primary_key=True),
@@ -54,16 +91,8 @@ Vet = Table('Vet', metadata,
             Column('work_phone', String(22), nullable=False),
             Column('work2_phone', String(22)),
             Column('mobile_phone', String(22)),
-            Column('email', String(50)))
-
-Adoption = Table('Adoption', metadata,
-                 Column('adoption_ID', Integer, primary_key=True),
-                 Column('animal_ID', None, ForeignKey('Animal.animal_ID'), nullable=False),
-                 Column('person_ID', None, ForeignKey('Person.person_ID'), nullable=False),
-                 Column('timestamp', TIMESTAMP, nullable=False))
-
-Breed = Table('Breed', metadata,
-              Column('breed', String(32), primary_key=True))
+            Column('email', String(50)),
+            Column('memo', String(200)))
 
 metadata.drop_all(engine)
 metadata.create_all(engine)

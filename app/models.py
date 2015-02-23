@@ -27,37 +27,42 @@ class Payment_Types(Model):
 
 
 class US_States(Model):
-    Column('state', String(2), primary_key=True)
+    state = Column('state', String(2), primary_key=True)
 
     def __repr__(self):
         return self.name
 
 
 class Payments(Model):
-    Column('payment_ID', Integer, primary_key=True),
-    Column('person_ID', None, ForeignKey('Person.person_ID')),
-    Column('payment_type', None, ForeignKey('Payment_Types.payment_type')),
-    Column('timestamp', TIMESTAMP, nullable=False),
-    Column('amount', Numeric, nullable=False)
+    payment_ID = Column('payment_ID', Integer, primary_key=True),
+    person_ID = Column('person_ID', None, ForeignKey('Person.person_ID')),
+    payment_type = Column('payment_type', None, ForeignKey('Payment_Types.payment_type')),
+    timestamp = Column('timestamp', TIMESTAMP, nullable=False),
+    amount = Column('amount', Numeric, nullable=False)
+
+    person = relationship('Person')
+    payment_types = relationship('Payment_Types')
 
     def __repr__(self):
         return self.name
 
 
 class Person(Model):
-    Column('person_ID', Integer, primary_key=True),
-    Column('last_name', String(32), nullable=False),
-    Column('first_name', String(32), nullable=False),
-    Column('address', String(32), nullable=False),
-    Column('address2', String(32)),
-    Column('city', String(32), nullable=False),
-    Column('state', None, ForeignKey('US_States.state'), nullable=False),
-    Column('zip', String(10), nullable=False),
-    Column('home_phone', String(22), nullable=False),
-    Column('work_phone', String(22)),
-    Column('mobile_phone', String(22)),
-    Column('email', String(50)),
-    Column('memo', String(200))
+    person_ID = Column('person_ID', Integer, primary_key=True),
+    last_name = Column('last_name', String(32), nullable=False),
+    first_name = Column('first_name', String(32), nullable=False),
+    address = Column('address', String(32), nullable=False),
+    address2 = Column('address2', String(32)),
+    city = Column('city', String(32), nullable=False),
+    state = Column('state', None, ForeignKey('US_States.state'), nullable=False),
+    zip = Column('zip', String(10), nullable=False),
+    home_phone = Column('home_phone', String(22), nullable=False),
+    work_phone = Column('work_phone', String(22)),
+    mobile_phone = Column('mobile_phone', String(22)),
+    email = Column('email', String(50)),
+    memo = Column('memo', String(200))
+
+    us_states = relationship('US_States')
 
     def __repr__(self):
         return self.name

@@ -1,52 +1,108 @@
-from flask import render_template
-from flask.ext.appbuilder import BaseView, expose, has_access
-from app import appbuilder
+import calendar
+from flask.ext.appbuilder import ModelView
+from flask.ext.appbuilder.models.sqla.interface import SQLAInterface
+from flask.ext.appbuilder.charts.views import GroupByChartView
+from flask.ext.appbuilder.models.group import aggregate_count
+from flask.ext.babelpkg import lazy_gettext as _
 
 
-class MyView(BaseView):
-    default_view = 'method1'
-
-    @expose('/method1/')
-    @has_access
-    def method1(self):
-        # do something with param1
-        # and return to previous page or index
-        from sqlalchemy import Table, Column, Integer, String, MetaData, ForeignKey
-
-        metadata = MetaData()
-        Color = Table('Color', metadata,
-                      Column('color', String))
-
-        from sqlalchemy import create_engine, select
-
-        engine = create_engine('postgresql+pg8000://postgres:postgres@localhost:5432/movedb')
-        conn = engine.connect()
-        s = select([Color])
-        result = conn.execute(s)
-
-        return 'Hello' + str(result)
-
-    @expose('/method2/<string:param1>')
-    @has_access
-    def method2(self, param1):
-        # do something with param1
-        # and render template with param
-        param1 = 'Goodbye %s' % (param1)
-        return param1
-
-    @expose('/method3/<string:param1>')
-    @has_access
-    def method3(self, param1):
-        # do something with param1
-        # and render template with param
-        param1 = 'Goodbye %s' % (param1)
-        return self.render_template('method3.html',
-                                    param1=param1)
+from app import db, appbuilder
+from models import Payment_Types, Payments, Person, US_States
 
 
-appbuilder.add_view(MyView(), "Method1", category='My View')
-# appbuilder.add_view(MyView(), "Method2", href='/myview/method2/jonh', category='My View')
-# Use add link instead there is no need to create MyView twice.
-appbuilder.add_link("Method2", href='/myview/method2/jonh', category='My View')
-appbuilder.add_link("Method3", href='/myview/method3/jonh', category='My View')
+def fill_gender():
+    try:
+        db.session.add(Gender(name='Male'))
+        db.session.add(Gender(name='Female'))
+        db.session.commit()
+    except:
+        db.session.rollback()
+
+
+class ContactModelView(ModelView):
+    datamodel = SQLAInterface(Contact)
+
+    list_columns = ['name', 'personal_celphone', 'birthday', 'contact_group.name']
+
+    base_order = ('name', 'asc')
+
+    show_fieldsets = [
+        ('Summary', {'fields': ['name', 'gender', 'contact_group']}),
+        (
+            'Personal Info',
+            {'fields': ['address', 'birthday', 'personal_phone', 'personal_celphone'], 'expanded': False}),
+        ]
+
+    add_fieldsets = [
+        ('Summary', {'fields': ['name', 'gender', 'contact_group']}),
+        (
+            'Personal Info',
+            {'fields': ['address', 'birthday', 'personal_phone', 'personal_celphone'], 'expanded': False}),
+        ]
+
+    edit_fieldsets = [
+        ('Summary', {'fields': ['name', 'gender', 'contact_group']}),
+        (
+            'Personal Info',
+            {'fields': ['address', 'birthday', 'personal_phone', 'personal_celphone'], 'expanded': False}),
+        ]
+
+
+class GroupModelView(ModelView):
+    datamodel = SQLAInterface(ContactGroup)
+    related_views = [ContactModelView]
+
+
+class ContactChartView(GroupByChartView):
+    datamodel = SQLAInterface(Contact)
+    chart_title = 'Grouped contacts'
+    label_columns = ContactModelView.label_columns
+    chart_type = 'PieChart'
+
+    definitions = [
+        {
+            'group' : 'contact_group',
+            'series' : [(aggregate_count,'contact_group')]
+        },
+        {
+            'group' : 'gender',
+            'series' : [(aggregate_count,'contact_group')]
+        }
+    ]
+
+
+def pretty_month_year(value):
+    return calendar.month_name[value.month] + ' ' + str(value.year)
+
+def pretty_year(value):
+    return str(value.year)
+
+
+class ContactTimeChartView(GroupByChartView):
+    datamodel = SQLAInterface(Contact)
+
+    chart_title = 'Grouped Birth contacts'
+    chart_type = 'AreaChart'
+    label_columns = ContactModelView.label_columns
+    definitions = [
+        {
+            'group' : 'month_year',
+            'formatter': pretty_month_year,
+            'series': [(aggregate_count, 'group')]
+        },
+        {
+            'group': 'year',
+            'formatter': pretty_year,
+            'series': [(aggregate_count, 'group')]
+        }
+    ]
+
+
+db.create_all()
+fill_gender()
+appbuilder.add_view(GroupModelView, "List Groups", icon="fa-folder-open-o", category="Contacts", category_icon='fa-envelope')
+appbuilder.add_view(ContactModelView, "List Contacts", icon="fa-envelope", category="Contacts")
+appbuilder.add_separator("Contacts")
+appbuilder.add_view(ContactChartView, "Contacts Chart", icon="fa-dashboard", category="Contacts")
+appbuilder.add_view(ContactTimeChartView, "Contacts Birth Chart", icon="fa-dashboard", category="Contacts")
 

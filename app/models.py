@@ -7,7 +7,7 @@ AuditMixin will add automatic timestamp of created and modified by who
 """
 import datetime
 from sqlalchemy import Table, Column, Integer, String, Boolean, Numeric, SmallInteger, TIMESTAMP, ForeignKey, \
-    create_engine, MetaData, Date
+    create_engine, MetaData, Date, PrimaryKeyConstraint
 
 from sqlalchemy.orm import relationship
 from flask.ext.appbuilder import Model
@@ -15,30 +15,48 @@ from flask.ext.appbuilder import Model
 
 # http://flask-appbuilder.readthedocs.org/en/latest/quickhowto.html
 
-mindate = datetime.date(datetime.MINYEAR, 1, 1)
-
 
 class Payment_Types(Model):
-    payment_type = Column('payment_type', String(10), primary_key=True),
-    is_credit_card = Column('is_credit_card', Boolean, nullable=False)
+    payment_type = Column(String(10), primary_key=True)
+    is_credit_card = Column(Boolean, nullable=False)
 
     def __repr__(self):
         return self.name
 
 
 class US_States(Model):
-    state = Column('state', String(2), primary_key=True)
+    state = Column(String(2), primary_key=True)
+
+    def __repr__(self):
+        return self.name
+
+class Person(Model):
+    person_ID = Column(Integer, primary_key=True)
+    last_name = Column(String(32), nullable=False)
+    first_name = Column(String(32), nullable=False)
+    address = Column(String(32), nullable=False)
+    address2 = Column(String(32))
+    city = Column(String(32), nullable=False)
+    state = Column(ForeignKey('US_States.state'), nullable=False)
+    zip = Column(String(10), nullable=False)
+    home_phone = Column(String(22), nullable=False)
+    work_phone = Column(String(22))
+    mobile_phone = Column(String(22))
+    email = Column(String(50))
+    memo = Column(String(200))
+
+    us_states = relationship('US_States')
 
     def __repr__(self):
         return self.name
 
 
 class Payments(Model):
-    payment_ID = Column('payment_ID', Integer, primary_key=True),
-    person_ID = Column('person_ID', None, ForeignKey('Person.person_ID')),
-    payment_type = Column('payment_type', None, ForeignKey('Payment_Types.payment_type')),
-    timestamp = Column('timestamp', TIMESTAMP, nullable=False),
-    amount = Column('amount', Numeric, nullable=False)
+    payment_ID = Column(Integer, primary_key=True)
+    person_ID = Column(ForeignKey('Person.person_ID'))
+    payment_type = Column(ForeignKey('Payment_Types.payment_type'))
+    timestamp = Column(TIMESTAMP, nullable=False)
+    amount = Column(Numeric, nullable=False)
 
     person = relationship('Person')
     payment_types = relationship('Payment_Types')
@@ -47,29 +65,9 @@ class Payments(Model):
         return self.name
 
 
-class Person(Model):
-    person_ID = Column('person_ID', Integer, primary_key=True),
-    last_name = Column('last_name', String(32), nullable=False),
-    first_name = Column('first_name', String(32), nullable=False),
-    address = Column('address', String(32), nullable=False),
-    address2 = Column('address2', String(32)),
-    city = Column('city', String(32), nullable=False),
-    state = Column('state', None, ForeignKey('US_States.state'), nullable=False),
-    zip = Column('zip', String(10), nullable=False),
-    home_phone = Column('home_phone', String(22), nullable=False),
-    work_phone = Column('work_phone', String(22)),
-    mobile_phone = Column('mobile_phone', String(22)),
-    email = Column('email', String(50)),
-    memo = Column('memo', String(200))
-
-    us_states = relationship('US_States')
-
-    def __repr__(self):
-        return self.name
-
 # Adoption = Table('Adoption', metadata,
 # Column('adoption_ID', Integer, primary_key=True),
-#                  Column('animal_ID', None, ForeignKey('Animal.animal_ID'), nullable=False),
+# Column('animal_ID', None, ForeignKey('Animal.animal_ID'), nullable=False),
 #                  Column('person_ID', None, ForeignKey('Person.person_ID'), nullable=False),
 #                  Column('is_foster', Boolean, nullable=False),
 #                  Column('timestamp', TIMESTAMP, nullable=False),

@@ -1,14 +1,29 @@
+import logging
 import calendar
 from flask.ext.appbuilder import ModelView
 from flask.ext.appbuilder.models.sqla.interface import SQLAInterface
 from flask.ext.appbuilder.charts.views import GroupByChartView
 from flask.ext.appbuilder.models.group import aggregate_count
 from flask.ext.babelpkg import lazy_gettext as _
-
+import os
 
 from app import db, appbuilder
-from .models import ContactGroup, Gender, Contact
+from .models import ContactGroup, Gender, Contact, State
 
+
+def fill_states():
+    try:
+        logging.info('Filling in States')
+        import json
+        # logging.debug(os.listdir(os.curdir))
+        os.chdir('app')
+        # logging.debug(os.listdir(os.curdir))
+        state_list = json.loads(open('states.json').read())
+        for state in state_list:
+            db.session.add(State(name=state))
+            db.session.commit()
+    except:
+        db.session.rollback()
 
 
 def fill_gender():
@@ -18,7 +33,6 @@ def fill_gender():
         db.session.commit()
     except:
         db.session.rollback()
-
 
 class ContactModelView(ModelView):
     datamodel = SQLAInterface(Contact)
@@ -98,9 +112,10 @@ class ContactTimeChartView(GroupByChartView):
         }
     ]
 
-
+db.delete_all()
 db.create_all()
 fill_gender()
+fill_states()
 appbuilder.add_view(GroupModelView, "List Groups", icon="fa-folder-open-o", category="Contacts", category_icon='fa-envelope')
 appbuilder.add_view(ContactModelView, "List Contacts", icon="fa-envelope", category="Contacts")
 appbuilder.add_separator("Contacts")

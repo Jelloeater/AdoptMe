@@ -10,6 +10,7 @@ from app import db, appbuilder
 from .models import ContactGroup, Gender, Contact
 
 
+
 def fill_gender():
     try:
         db.session.add(Gender(name='Male'))

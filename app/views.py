@@ -112,7 +112,6 @@ class ContactTimeChartView(GroupByChartView):
         }
     ]
 
-db.delete_all()
 db.create_all()
 fill_gender()
 fill_states()

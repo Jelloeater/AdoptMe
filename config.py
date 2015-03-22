@@ -9,7 +9,7 @@ SECRET_KEY = 'password'
 # The SQLAlchemy connection string.
 #SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'app.db')
 #SQLALCHEMY_DATABASE_URI = 'mysql://myapp@localhost/myapp'
-SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:postgres@localhost:5432/AdoptMe'
+SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:postgres@localhost:5432/adoptme'
 
 # Flask-WTF flag for CSRF
 CSRF_ENABLED = True

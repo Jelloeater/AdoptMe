@@ -14,6 +14,7 @@ apt-get install postgresql-server-dev-* python-psycopg2 postgresql postgresql-cl
 pip install flask-appbuilder
 
 configure DB permissions and users
+rop
 
 Create db 'adoptme'
 

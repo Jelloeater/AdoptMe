@@ -8,7 +8,7 @@ from flask.ext.babelpkg import lazy_gettext as _
 import os
 
 from app import db, appbuilder
-from .models import ContactGroup, Gender, Contact, State
+from .models import Vet, State
 
 
 def fill_states():
@@ -25,47 +25,33 @@ def fill_states():
     except:
         db.session.rollback()
 
+class VetModelView(ModelView):
+    datamodel = SQLAInterface(Vet)
 
-def fill_gender():
-    try:
-        db.session.add(Gender(name='Male'))
-        db.session.add(Gender(name='Female'))
-        db.session.commit()
-    except:
-        db.session.rollback()
-
-class ContactModelView(ModelView):
-    datamodel = SQLAInterface(Contact)
-
-    list_columns = ['name', 'personal_celphone', 'birthday', 'contact_group.name', 'state']
+    list_columns = ['name', 'personal_celphone', 'state']
 
     base_order = ('name', 'asc')
-
+    # TODO Edit fields to match DB model
     show_fieldsets = [
-        ('Summary', {'fields': ['name', 'gender', 'contact_group']}),
+        ('Summary', {'fields': ['name']}),
         (
             'Personal Info',
-            {'fields': ['address', 'birthday', 'personal_phone', 'personal_celphone', 'state'], 'expanded': False}),
+            {'fields': ['address', 'personal_phone', 'personal_celphone', 'state'], 'expanded': False}),
         ]
 
     add_fieldsets = [
-        ('Summary', {'fields': ['name', 'gender', 'contact_group']}),
+        ('Summary', {'fields': ['name']}),
         (
             'Personal Info',
-            {'fields': ['address', 'birthday', 'personal_phone', 'personal_celphone', 'state'], 'expanded': False}),
+            {'fields': ['address', 'personal_phone', 'personal_celphone', 'state'], 'expanded': False}),
         ]
 
     edit_fieldsets = [
-        ('Summary', {'fields': ['name', 'gender', 'contact_group' ]}),
+        ('Summary', {'fields': ['name']}),
         (
             'Personal Info',
-            {'fields': ['address', 'birthday', 'personal_phone', 'personal_celphone', 'state'], 'expanded': False}),
+            {'fields': ['address', 'personal_phone', 'personal_celphone', 'state'], 'expanded': False}),
         ]
-
-
-class GroupModelView(ModelView):
-    datamodel = SQLAInterface(ContactGroup)
-    related_views = [ContactModelView]
 
 
 
@@ -75,11 +61,7 @@ def pretty_month_year(value):
 def pretty_year(value):
     return str(value.year)
 
-
 db.create_all()
-fill_gender()
 fill_states()
-appbuilder.add_view(GroupModelView, "List Groups", icon="fa-folder-open-o", category="Contacts", category_icon='fa-envelope')
-appbuilder.add_view(ContactModelView, "List Contacts", icon="fa-envelope", category="Contacts")
-appbuilder.add_separator("Contacts")
+appbuilder.add_view(VetModelView, "Vets", icon="fa-envelope")
 

@@ -40,32 +40,43 @@ class VetModelView(ModelView):
     # fax_number
     # email
 
-    list_columns = ['name', 'personal_celphone', 'state']
+    list_columns = ['name', 'work_phone', 'state']
 
     base_order = ('name', 'asc')
     # TODO Edit fields to match DB model
     show_fieldsets = [
         ('Summary', {'fields': ['name']}),
         (
-            'Personal Info',
-            {'fields': ['address', 'address2', 'city', 'state', 'zipcode', 'work_phone', 'fax_number', 'email'],
-             'expanded': True})
-        ,
+            'Contact Info',
+            {'fields': ['work_phone', 'fax_number', 'email'],
+             'expanded': True}),
+        (
+            'Address Info',
+            {'fields': ['address', 'address2', 'city', 'state', 'zipcode'],
+             'expanded': False}),
     ]
 
     add_fieldsets = [
         ('Summary', {'fields': ['name']}),
         (
-            'Personal Info',
-            {'fields': ['address', 'address2', 'city', 'state', 'zipcode', 'work_phone', 'fax_number', 'email'],
+            'Contact Info',
+            {'fields': ['work_phone', 'fax_number', 'email'],
+             'expanded': True}),
+        (
+            'Address Info',
+            {'fields': ['address', 'address2', 'city', 'state', 'zipcode'],
              'expanded': True}),
         ]
 
     edit_fieldsets = [
         ('Summary', {'fields': ['name']}),
         (
-            'Personal Info',
-            {'fields': ['address', 'address2', 'city', 'state', 'zipcode', 'work_phone', 'fax_number', 'email'],
+            'Contact Info',
+            {'fields': ['work_phone', 'fax_number', 'email'],
+             'expanded': True}),
+        (
+            'Address Info',
+            {'fields': ['address', 'address2', 'city', 'state', 'zipcode'],
              'expanded': True}),
         ]
 

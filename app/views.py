@@ -25,8 +25,20 @@ def fill_states():
     except:
         db.session.rollback()
 
+
 class VetModelView(ModelView):
     datamodel = SQLAInterface(Vet)
+
+
+    # name
+    # address
+    # address2
+    # city
+    # state
+    # zipcode
+    # work_phone
+    # fax_number
+    # email
 
     list_columns = ['name', 'personal_celphone', 'state']
 
@@ -36,30 +48,35 @@ class VetModelView(ModelView):
         ('Summary', {'fields': ['name']}),
         (
             'Personal Info',
-            {'fields': ['address', 'personal_phone', 'personal_celphone', 'state'], 'expanded': False}),
-        ]
+            {'fields': ['address', 'address2', 'city', 'state', 'zipcode', 'work_phone', 'fax_number', 'email'],
+             'expanded': True})
+        ,
+    ]
 
     add_fieldsets = [
         ('Summary', {'fields': ['name']}),
         (
             'Personal Info',
-            {'fields': ['address', 'personal_phone', 'personal_celphone', 'state'], 'expanded': False}),
+            {'fields': ['address', 'address2', 'city', 'state', 'zipcode', 'work_phone', 'fax_number', 'email'],
+             'expanded': True}),
         ]
 
     edit_fieldsets = [
         ('Summary', {'fields': ['name']}),
         (
             'Personal Info',
-            {'fields': ['address', 'personal_phone', 'personal_celphone', 'state'], 'expanded': False}),
+            {'fields': ['address', 'address2', 'city', 'state', 'zipcode', 'work_phone', 'fax_number', 'email'],
+             'expanded': True}),
         ]
-
 
 
 def pretty_month_year(value):
     return calendar.month_name[value.month] + ' ' + str(value.year)
 
+
 def pretty_year(value):
     return str(value.year)
+
 
 db.create_all()
 fill_states()

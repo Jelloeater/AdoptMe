@@ -26,10 +26,14 @@ class Vet(Model):
     id = Column(Integer, primary_key=True)
     name = Column(String(150), unique=True, nullable=False)
     address = Column(String(564))
-    personal_phone = Column(String(20))
-    personal_celphone = Column(String(20))
+    address2 = Column(String(564))
+    city = Column(String(564))
     state_id = Column(Integer, ForeignKey('state.id'), nullable=False)
     state = relationship("State")
+    zipcode = Column(String(20))
+    work_phone = Column(String(20))
+    fax_number = Column(String(20))
+    email = Column(String(564))
 
     def __repr__(self):
         return self.name

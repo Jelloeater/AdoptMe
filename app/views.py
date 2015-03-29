@@ -8,7 +8,7 @@ from flask.ext.babelpkg import lazy_gettext as _
 import os
 
 from app import db, appbuilder
-from .models import Vet, State
+from .models import Vet, State, Person
 
 
 def fill_states():
@@ -26,24 +26,19 @@ def fill_states():
         db.session.rollback()
 
 
+def pretty_month_year(value):
+    return calendar.month_name[value.month] + ' ' + str(value.year)
+
+
+def pretty_year(value):
+    return str(value.year)
+
+
 class VetModelView(ModelView):
     datamodel = SQLAInterface(Vet)
 
-
-    # name
-    # address
-    # address2
-    # city
-    # state
-    # zipcode
-    # work_phone
-    # fax_number
-    # email
-
-    list_columns = ['name', 'work_phone', 'state']
-
+    list_columns = ['name', 'work_phone', 'fax_number']
     base_order = ('name', 'asc')
-    # TODO Edit fields to match DB model
     show_fieldsets = [
         ('Summary', {'fields': ['name']}),
         (
@@ -66,7 +61,7 @@ class VetModelView(ModelView):
             'Address Info',
             {'fields': ['address', 'address2', 'city', 'state', 'zipcode'],
              'expanded': True}),
-        ]
+    ]
 
     edit_fieldsets = [
         ('Summary', {'fields': ['name']}),
@@ -78,15 +73,61 @@ class VetModelView(ModelView):
             'Address Info',
             {'fields': ['address', 'address2', 'city', 'state', 'zipcode'],
              'expanded': True}),
-        ]
+    ]
 
 
-def pretty_month_year(value):
-    return calendar.month_name[value.month] + ' ' + str(value.year)
+class PersonModelView(ModelView):
+    datamodel = SQLAInterface(Person)
 
+    # name
+    # address
+    # address2
+    # city
+    # state_id
+    # state
+    # zipcode
+    # home_phone
+    # work_phone
+    # mobile_phone
+    # email
 
-def pretty_year(value):
-    return str(value.year)
+    list_columns = ['name', 'work_phone', 'home_phone', 'mobile_phone']
+    base_order = ('name', 'asc')
+    show_fieldsets = [
+        ('Summary', {'fields': ['name']}),
+        (
+            'Contact Info',
+            {'fields': ['work_phone', 'home_phone', 'mobile_phone', 'email'],
+             'expanded': True}),
+        (
+            'Address Info',
+            {'fields': ['address', 'address2', 'city', 'state', 'zipcode'],
+             'expanded': False}),
+    ]
+
+    add_fieldsets = [
+        ('Summary', {'fields': ['name']}),
+        (
+            'Contact Info',
+            {'fields': ['work_phone', 'fax_number', 'email'],
+             'expanded': True}),
+        (
+            'Address Info',
+            {'fields': ['address', 'address2', 'city', 'state', 'zipcode'],
+             'expanded': True}),
+    ]
+
+    edit_fieldsets = [
+        ('Summary', {'fields': ['name']}),
+        (
+            'Contact Info',
+            {'fields': ['work_phone', 'fax_number', 'email'],
+             'expanded': True}),
+        (
+            'Address Info',
+            {'fields': ['address', 'address2', 'city', 'state', 'zipcode'],
+             'expanded': True}),
+    ]
 
 
 db.create_all()

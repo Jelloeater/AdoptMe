@@ -34,6 +34,7 @@ class Vet(Model):
     work_phone = Column(String(20), nullable=False)
     fax_number = Column(String(20))
     email = Column(String(564))
+    memo = Column(String(564))
 
     def __repr__(self):
         return self.name
@@ -51,6 +52,7 @@ class Person(Model):
     work_phone = Column(String(20))
     mobile_phone = Column(String(20))
     email = Column(String(564))
+    memo = Column(String(564))
 
     def __repr__(self):
         return self.name

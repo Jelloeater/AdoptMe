@@ -37,10 +37,10 @@ def pretty_year(value):
 class VetModelView(ModelView):
     datamodel = SQLAInterface(Vet)
 
-    list_columns = ['name', 'work_phone', 'fax_number']
+    list_columns = ['name', 'work_phone', 'memo']
     base_order = ('name', 'asc')
     show_fieldsets = [
-        ('Summary', {'fields': ['name']}),
+        ('Summary', {'fields': ['name', 'memo']}),
         (
             'Contact Info',
             {'fields': ['work_phone', 'fax_number', 'email'],
@@ -52,7 +52,7 @@ class VetModelView(ModelView):
     ]
 
     add_fieldsets = [
-        ('Summary', {'fields': ['name']}),
+        ('Summary', {'fields': ['name', 'memo']}),
         (
             'Contact Info',
             {'fields': ['work_phone', 'fax_number', 'email'],
@@ -64,7 +64,7 @@ class VetModelView(ModelView):
     ]
 
     edit_fieldsets = [
-        ('Summary', {'fields': ['name']}),
+        ('Summary', {'fields': ['name', 'memo']}),
         (
             'Contact Info',
             {'fields': ['work_phone', 'fax_number', 'email'],
@@ -79,22 +79,10 @@ class VetModelView(ModelView):
 class PersonModelView(ModelView):
     datamodel = SQLAInterface(Person)
 
-    # name
-    # address
-    # address2
-    # city
-    # state_id
-    # state
-    # zipcode
-    # home_phone
-    # work_phone
-    # mobile_phone
-    # email
-
-    list_columns = ['name', 'work_phone', 'home_phone', 'mobile_phone']
+    list_columns = ['name', 'work_phone', 'home_phone', 'mobile_phone', 'memo']
     base_order = ('name', 'asc')
     show_fieldsets = [
-        ('Summary', {'fields': ['name']}),
+        ('Summary', {'fields': ['name', 'memo']}),
         (
             'Contact Info',
             {'fields': ['work_phone', 'home_phone', 'mobile_phone', 'email'],
@@ -106,22 +94,22 @@ class PersonModelView(ModelView):
     ]
 
     add_fieldsets = [
-        ('Summary', {'fields': ['name']}),
+        ('Summary', {'fields': ['name', 'memo']}),
         (
             'Contact Info',
-            {'fields': ['work_phone', 'fax_number', 'email'],
+            {'fields': ['work_phone', 'home_phone', 'mobile_phone', 'email'],
              'expanded': True}),
         (
             'Address Info',
             {'fields': ['address', 'address2', 'city', 'state', 'zipcode'],
-             'expanded': True}),
+             'expanded': False}),
     ]
 
     edit_fieldsets = [
-        ('Summary', {'fields': ['name']}),
+        ('Summary', {'fields': ['name', 'memo']}),
         (
             'Contact Info',
-            {'fields': ['work_phone', 'fax_number', 'email'],
+            {'fields': ['work_phone', 'home_phone', 'mobile_phone', 'email'],
              'expanded': True}),
         (
             'Address Info',
@@ -132,5 +120,6 @@ class PersonModelView(ModelView):
 
 db.create_all()
 fill_states()
-appbuilder.add_view(VetModelView, "Vets", icon="fa-envelope")
+appbuilder.add_view(VetModelView, "Vets", icon="fa-building-o")
+appbuilder.add_view(PersonModelView, "People", icon="fa-users")
 

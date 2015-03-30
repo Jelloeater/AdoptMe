@@ -1,5 +1,5 @@
 import datetime
-from sqlalchemy import Column, Integer, String, ForeignKey, Date
+from sqlalchemy import Column, Integer, String, ForeignKey, Date, Boolean
 from sqlalchemy.orm import relationship
 from flask.ext.appbuilder import Model
 
@@ -20,6 +20,16 @@ class State(Model):
     def __repr__(self):
         return self.name
 
+
+class PaymentType(Model):
+    id = Column(Integer, primary_key=True)
+    payment_type = Column(String(50), unique=True, nullable=False)
+    is_credit_card = Column(Boolean, nullable=False)
+
+    def __repr__(self):
+        return self.name
+
+#TODO add payments table model
 
 class Vet(Model):
     # TODO Add fields for proper model (take from create_database.py)

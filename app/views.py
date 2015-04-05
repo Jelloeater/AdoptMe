@@ -8,7 +8,7 @@ from flask.ext.babelpkg import lazy_gettext as _
 import os
 
 from app import db, appbuilder
-from .models import Vet, State, Person
+from .models import Vet, State, Person, Payment, PaymentType
 
 
 def fill_states():
@@ -21,6 +21,22 @@ def fill_states():
         state_list = json.loads(open('states.json').read())
         for state in state_list:
             db.session.add(State(name=state))
+            db.session.commit()
+    except:
+        db.session.rollback()
+
+
+def fill_payment_types():
+    try:
+        logging.info('Filling in Payment Types')
+        import json
+        # logging.debug(os.listdir(os.curdir))
+        os.chdir('app')
+        logging.debug(os.listdir(os.curdir))
+        payment_type_list = json.loads(open('paymentTypes.json').read())
+        for payment_type in payment_type_list:
+            db.session.add(PaymentType(payment_type=payment_type['name'],
+                                       is_credit_card=payment_type['is_credit_card']))
             db.session.commit()
     except:
         db.session.rollback()
@@ -119,6 +135,7 @@ class PersonModelView(ModelView):
 
 
 db.create_all()
+fill_payment_types()
 fill_states()
 appbuilder.add_view(VetModelView, "Vets", icon="fa-building-o")
 appbuilder.add_view(PersonModelView, "People", icon="fa-users")

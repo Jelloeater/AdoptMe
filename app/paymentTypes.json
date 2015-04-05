@@ -1,0 +1,11 @@
+[
+    {
+        "name": "Mastercard",
+        "is_credit_card": true
+    }
+    ,
+    {
+        "name": "Visa",
+        "is_credit_card": true
+    }
+]

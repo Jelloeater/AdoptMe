@@ -13,6 +13,7 @@ class ContactGroup(Model):
     def __repr__(self):
         return self.name
 
+
 class State(Model):
     id = Column(Integer, primary_key=True)
     name = Column(String(50), unique=True, nullable=False)
@@ -29,7 +30,19 @@ class PaymentType(Model):
     def __repr__(self):
         return self.name
 
-#TODO add payments table model
+
+class Payment(Model):
+    id = Column(Integer, primary_key=True)
+    person_id = Column(Integer, ForeignKey('person.id'), nullable=False)
+    person = relationship("Person")
+
+    payment_type_id = Column(Integer, ForeignKey('payment_type.id'), nullable=False)
+    # Logical SQL name, won't always match
+    payment_type = relationship("PaymentType")  # Class name
+
+    def __repr__(self):
+        return self.name
+
 
 class Vet(Model):
     # TODO Add fields for proper model (take from create_database.py)
@@ -48,6 +61,7 @@ class Vet(Model):
 
     def __repr__(self):
         return self.name
+
 
 class Person(Model):
     id = Column(Integer, primary_key=True)

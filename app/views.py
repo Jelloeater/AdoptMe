@@ -11,10 +11,12 @@ from app import db, appbuilder
 from .models import Vet, State, Person, Payment, PaymentType
 
 
-def fill_states():
+def fill_data():
+    # FIXME Only the first method call is getting executed on the DB
+    import json
+    # Import States
     try:
         logging.info('Filling in States')
-        import json
         # logging.debug(os.listdir(os.curdir))
         os.chdir('app')
         # logging.debug(os.listdir(os.curdir))
@@ -25,14 +27,9 @@ def fill_states():
     except:
         db.session.rollback()
 
-
-def fill_payment_types():
+    # Import Payment methods
     try:
         logging.info('Filling in Payment Types')
-        import json
-        # logging.debug(os.listdir(os.curdir))
-        os.chdir('app')
-        logging.debug(os.listdir(os.curdir))
         payment_type_list = json.loads(open('paymentTypes.json').read())
         for payment_type in payment_type_list:
             db.session.add(PaymentType(payment_type=payment_type['payment_type'],
@@ -40,6 +37,7 @@ def fill_payment_types():
             db.session.commit()
     except:
         db.session.rollback()
+
 
 
 def pretty_month_year(value):
@@ -162,8 +160,7 @@ class PaymentModelView(ModelView):
 
 
 db.create_all()
-fill_payment_types()
-fill_states()
+fill_data()
 appbuilder.add_view(VetModelView, "Vets", icon="fa-building-o")
 appbuilder.add_view(PersonModelView, "People", icon="fa-users")
 appbuilder.add_view(PaymentModelView, "Payments", icon="fa-money")

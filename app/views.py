@@ -62,7 +62,7 @@ class VetModelView(ModelView):
         (
             'Address Info',
             {'fields': ['address', 'address2', 'city', 'state', 'zipcode'],
-             'expanded': False}),
+             'expanded': True}),
     ]
 
     add_fieldsets = [
@@ -104,7 +104,7 @@ class PersonModelView(ModelView):
         (
             'Address Info',
             {'fields': ['address', 'address2', 'city', 'state', 'zipcode'],
-             'expanded': False}),
+             'expanded': True}),
     ]
 
     add_fieldsets = [
@@ -116,7 +116,7 @@ class PersonModelView(ModelView):
         (
             'Address Info',
             {'fields': ['address', 'address2', 'city', 'state', 'zipcode'],
-             'expanded': False}),
+             'expanded': True}),
     ]
 
     edit_fieldsets = [

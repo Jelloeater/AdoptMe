@@ -1,5 +1,5 @@
 import datetime
-from sqlalchemy import Column, Integer, String, ForeignKey, Date, Boolean
+from sqlalchemy import Column, Integer, String, ForeignKey, Date, Boolean, Numeric
 from sqlalchemy.orm import relationship
 from flask.ext.appbuilder import Model
 
@@ -39,6 +39,10 @@ class Payment(Model):
     payment_type_id = Column(Integer, ForeignKey('payment_type.id'), nullable=False)
     # Logical SQL name, won't always match
     payment_type = relationship("PaymentType")  # Class name
+    date = Column(Date, nullable=True)
+    amount = Column(Integer, nullable=True)
+    memo = Column(String(564))
+
 
     def __repr__(self):
         return self.name

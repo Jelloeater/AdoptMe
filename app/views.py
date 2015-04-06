@@ -35,7 +35,7 @@ def fill_payment_types():
         logging.debug(os.listdir(os.curdir))
         payment_type_list = json.loads(open('paymentTypes.json').read())
         for payment_type in payment_type_list:
-            db.session.add(PaymentType(payment_type=payment_type['name'],
+            db.session.add(PaymentType(payment_type=payment_type['payment_type'],
                                        is_credit_card=payment_type['is_credit_card']))
             db.session.commit()
     except:
@@ -134,9 +134,37 @@ class PersonModelView(ModelView):
     ]
 
 
+class PaymentModelView(ModelView):
+    datamodel = SQLAInterface(Payment)
+
+    list_columns = ['person', 'payment_type', 'date', 'amount', 'memo']
+    base_order = ('date', 'asc')
+    show_fieldsets = [
+        (
+            'Payment Info',
+            {'fields': ['person', 'payment_type', 'date', 'amount', 'memo'],
+             'expanded': True}),
+    ]
+
+    add_fieldsets = [
+        (
+            'Payment Info',
+            {'fields': ['person', 'payment_type', 'date', 'amount', 'memo'],
+             'expanded': True}),
+    ]
+
+    edit_fieldsets = [
+        (
+            'Payment Info',
+            {'fields': ['person', 'payment_type', 'date', 'amount', 'memo'],
+             'expanded': True}),
+    ]
+
+
 db.create_all()
 fill_payment_types()
 fill_states()
 appbuilder.add_view(VetModelView, "Vets", icon="fa-building-o")
 appbuilder.add_view(PersonModelView, "People", icon="fa-users")
+appbuilder.add_view(PaymentModelView, "Payments", icon="fa-money")
 

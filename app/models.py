@@ -28,7 +28,7 @@ class PaymentType(Model):
     is_credit_card = Column(Boolean, nullable=False)
 
     def __repr__(self):
-        return self.name
+        return self.payment_type # Needs to return a field
 
 
 class Payment(Model):

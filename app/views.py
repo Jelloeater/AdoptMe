@@ -193,21 +193,21 @@ class BreedModelView(ModelView):
     show_fieldsets = [
         (
             'Breed Name',
-            {'fields': ['breed', ],
+            {'fields': ['breed', 'animal_type'],
              'expanded': True}),
     ]
 
     add_fieldsets = [
         (
             'Breed Name',
-            {'fields': ['breed', ],
+            {'fields': ['breed', 'animal_type'],
              'expanded': True}),
     ]
 
     edit_fieldsets = [
         (
             'Breed Name',
-            {'fields': ['breed',],
+            {'fields': ['breed', 'animal_type'],
              'expanded': True}),
     ]
 

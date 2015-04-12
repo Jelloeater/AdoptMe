@@ -8,7 +8,7 @@ from flask.ext.babelpkg import lazy_gettext as _
 import os
 
 from app import db, appbuilder
-from .models import Vet, State, Person, Payment, PaymentType
+from .models import Vet, State, Person, Payment, PaymentType, Breed, Animal
 
 
 def fill_data():
@@ -37,7 +37,6 @@ def fill_data():
             db.session.commit()
     except:
         db.session.rollback()
-
 
 
 def pretty_month_year(value):
@@ -159,9 +158,68 @@ class PaymentModelView(ModelView):
     ]
 
 
+class AnimalModelView(ModelView):
+    datamodel = SQLAInterface(Animal)
+
+    list_columns = ['name']
+    base_order = ('name', 'asc')
+    show_fieldsets = [
+        (
+            'Summary',
+            {'fields': ['name', 'vet'],
+             'expanded': True}),
+    ]
+
+    add_fieldsets = [
+        (
+            'Summary',
+            {'fields': ['name', 'vet'],
+             'expanded': True}),
+    ]
+
+    edit_fieldsets = [
+        (
+            'Summary',
+            {'fields': ['name', 'vet'],
+             'expanded': True}),
+    ]
+
+
+class BreedModelView(ModelView):
+    datamodel = SQLAInterface(Breed)
+
+    list_columns = ['breed']
+    base_order = ('breed', 'asc')
+    show_fieldsets = [
+        (
+            'Breed Name',
+            {'fields': ['breed', ],
+             'expanded': True}),
+    ]
+
+    add_fieldsets = [
+        (
+            'Breed Name',
+            {'fields': ['breed', ],
+             'expanded': True}),
+    ]
+
+    edit_fieldsets = [
+        (
+            'Breed Name',
+            {'fields': ['breed',],
+             'expanded': True}),
+    ]
+
+
 db.create_all()
 fill_data()
+
 appbuilder.add_view(VetModelView, "Vets", icon="fa-building-o")
-appbuilder.add_view(PersonModelView, "People", icon="fa-users")
-appbuilder.add_view(PaymentModelView, "Payments", icon="fa-money")
+
+appbuilder.add_view(PersonModelView, "People", icon="fa-users", category='Customers')
+appbuilder.add_view(PaymentModelView, "Payments", icon="fa-money", category='Customers')
+
+appbuilder.add_view(BreedModelView, "Breed", icon="fa-paw", category='Animal Management')
+appbuilder.add_view(AnimalModelView, "Animal", icon="fa-paw", category='Animal Management')
 

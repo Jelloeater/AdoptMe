@@ -84,3 +84,33 @@ class Person(Model):
 
     def __repr__(self):
         return self.name
+
+
+class Breed(Model):
+    id = Column(Integer, primary_key=True)
+    breed = Column(String(64), unique=True, nullable=False)
+    # type_id = Column(Integer, ForeignKey('animal_type.id'), nullable=False)
+    # type = relationship("Animal_Type")
+
+    def __repr__(self):
+        return self.name
+
+
+class Animal_Type(Model):
+    id = Column(Integer, primary_key=True)
+    animal_type = Column(String(50), unique=True, nullable=False)
+
+    def __repr__(self):
+        return self.animal_type
+
+
+class Animal(Model):
+    id = Column(Integer, primary_key=True)
+    vet_id = Column(Integer, ForeignKey('vet.id'), nullable=False)
+    vet = relationship("Vet")
+    name = Column(String(150), unique=True, nullable=False)
+
+    memo = Column(String(564))
+
+    def __repr__(self):
+        return self.name

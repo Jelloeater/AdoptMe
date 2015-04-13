@@ -166,21 +166,21 @@ class AnimalModelView(ModelView):
     show_fieldsets = [
         (
             'Summary',
-            {'fields': ['name', 'vet'],
+            {'fields': ['name', 'vet','breed_type'],
              'expanded': True}),
     ]
 
     add_fieldsets = [
         (
             'Summary',
-            {'fields': ['name', 'vet'],
+            {'fields': ['name', 'vet','breed_type'],
              'expanded': True}),
     ]
 
     edit_fieldsets = [
         (
             'Summary',
-            {'fields': ['name', 'vet'],
+            {'fields': ['name', 'vet','breed_type'],
              'expanded': True}),
     ]
 

@@ -109,6 +109,9 @@ class Animal(Model):
     vet_id = Column(Integer, ForeignKey('vet.id'), nullable=False)
     vet = relationship("Vet")
     name = Column(String(150), unique=True, nullable=False)
+    breed_id = Column(Integer, ForeignKey('breed.id'), nullable=False)
+    breed_type = relationship("Breed")
+
 
     memo = Column(String(564))
 

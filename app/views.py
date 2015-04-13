@@ -1,6 +1,6 @@
 import logging
 import calendar
-from flask.ext.appbuilder import ModelView
+from flask.ext.appbuilder import ModelView, IndexView
 from flask.ext.appbuilder.models.sqla.interface import SQLAInterface
 from flask.ext.appbuilder.charts.views import GroupByChartView
 from flask.ext.appbuilder.models.group import aggregate_count
@@ -166,21 +166,21 @@ class AnimalModelView(ModelView):
     show_fieldsets = [
         (
             'Summary',
-            {'fields': ['name', 'vet','breed_type'],
+            {'fields': ['name', 'vet', 'breed_type'],
              'expanded': True}),
     ]
 
     add_fieldsets = [
         (
             'Summary',
-            {'fields': ['name', 'vet','breed_type'],
+            {'fields': ['name', 'vet', 'breed_type'],
              'expanded': True}),
     ]
 
     edit_fieldsets = [
         (
             'Summary',
-            {'fields': ['name', 'vet','breed_type'],
+            {'fields': ['name', 'vet', 'breed_type'],
              'expanded': True}),
     ]
 
@@ -214,7 +214,6 @@ class BreedModelView(ModelView):
 
 db.create_all()
 fill_data()
-
 appbuilder.add_view(VetModelView, "Vets", icon="fa-building-o")
 
 appbuilder.add_view(PersonModelView, "People", icon="fa-users", category='Customers')
@@ -222,4 +221,6 @@ appbuilder.add_view(PaymentModelView, "Payments", icon="fa-money", category='Cus
 
 appbuilder.add_view(BreedModelView, "Breed", icon="fa-paw", category='Animal Management')
 appbuilder.add_view(AnimalModelView, "Animal", icon="fa-paw", category='Animal Management')
+
+appbuilder.add_link("Save-A-Pet", href="http://www.saveapetli.net/", icon="fa-paw")
 

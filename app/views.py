@@ -52,10 +52,10 @@ def fill_data():
     try:
         logging.info('Filling in Breeds')
         breed_list = json.loads(open('breedTypes.json').read())
-        for breed_item in breed_list:
+        for breed in breed_list:
             # FIXME Getting exception on add
-            db.session.add(Breed(breed=breed_item['breed'],
-                                 animal_type=breed_item['animal_type']))
+            db.session.add(Breed(breed=breed['breed'],
+                                 type_id=breed['type_id']))
             db.session.commit()
     except:
         db.session.rollback()

@@ -1,31 +1,31 @@
 [
     {
         "breed": "Maine Coon",
-        "animal_type": "Cat"
+        "type_id": 2
     }
     ,
     {
         "breed": "Siamiese",
-        "animal_type": "Cat"
+        "type_id": 2
     }
     ,
     {
         "breed": "Black Lab",
-        "animal_type": "Dog"
+        "type_id": 1
     }
     ,
     {
         "breed": "America Shorthand",
-        "animal_type": "Cat"
+        "type_id": 2
     }
     ,
     {
         "breed": "Beta",
-        "animal_type": "Fish"
+        "type_id": 5
     }
     ,
     {
         "breed": "Boxer",
-        "animal_type": "Dog"
+        "type_id": 1
     }
 ]

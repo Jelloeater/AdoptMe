@@ -112,7 +112,7 @@ class Animal(Model):
     name = Column(String(150), unique=True, nullable=False)
     breed_id = Column(Integer, ForeignKey('breed.id'), nullable=False)
     breed_type = relationship("Breed")
-
+    # FIXME Add medial history
 
     memo = Column(String(564))
 

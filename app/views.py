@@ -53,7 +53,6 @@ def fill_data():
         logging.info('Filling in Breeds')
         breed_list = json.loads(open('breedTypes.json').read())
         for breed in breed_list:
-            # FIXME Getting exception on add
             db.session.add(Breed(breed=breed['breed'],
                                  type_id=breed['type_id']))
             db.session.commit()

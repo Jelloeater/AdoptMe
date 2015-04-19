@@ -38,6 +38,18 @@ def fill_data():
     except:
         db.session.rollback()
 
+    # Import Breeds methods
+    try:
+        logging.info('Filling in Breeds')
+        breed_list = json.loads(open('breedTypes.json').read())
+        for breed_item in breed_list:
+            # FIXME Getting exception on add
+            db.session.add(Breed(breed=breed_item['breed'],
+                                 animal_type=breed_item['animal_type']))
+            db.session.commit()
+    except:
+        db.session.rollback()
+
 
 def pretty_month_year(value):
     return calendar.month_name[value.month] + ' ' + str(value.year)
@@ -215,11 +227,11 @@ class AdoptionModelView(ModelView):
     datamodel = SQLAInterface(Adoption)
 
     list_columns = ['animal_name']
-    base_order = ('animal_name', 'asc')
+    base_order = ('id', 'asc')
     show_fieldsets = [
         (
             'Adoption Info',
-            {'fields': ['animal_name', 'person_name','memo'],
+            {'fields': ['id','animal_name', 'person_name','memo'],
              'expanded': True}),
         ]
 

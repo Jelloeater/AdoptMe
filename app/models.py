@@ -107,7 +107,7 @@ class Breed(Model):
 
 class Animal(Model):
     id = Column(Integer, primary_key=True)
-    vet_id = Column(Integer, ForeignKey('vet.id'), nullable=False)
+    vet_id = Column(Integer, ForeignKey('vet.id'), nullable=True)
     vet = relationship("Vet")
     name = Column(String(150), unique=True, nullable=False)
     breed_id = Column(Integer, ForeignKey('breed.id'), nullable=False)
@@ -129,4 +129,4 @@ class Adoption(Model):
     memo = Column(String(564))
 
     def __repr__(self):
-        return self.name
+        return self.id

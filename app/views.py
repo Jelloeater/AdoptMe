@@ -8,7 +8,7 @@ from flask.ext.babelpkg import lazy_gettext as _
 import os
 
 from app import db, appbuilder
-from .models import Vet, State, Person, Payment, PaymentType, Breed, Animal
+from .models import Vet, State, Person, Payment, PaymentType, Breed, Animal, Adoption
 
 
 def fill_data():
@@ -134,26 +134,26 @@ class PersonModelView(ModelView):
 class PaymentModelView(ModelView):
     datamodel = SQLAInterface(Payment)
 
-    list_columns = ['person', 'payment_type', 'date', 'amount', 'memo']
+    list_columns = ['person', 'payment_type', 'date', 'amount', 'memo','adoption']
     base_order = ('date', 'asc')
     show_fieldsets = [
         (
             'Payment Info',
-            {'fields': ['person', 'payment_type', 'date', 'amount', 'memo'],
+            {'fields': ['person', 'payment_type', 'date', 'amount', 'memo','adoption'],
              'expanded': True}),
     ]
 
     add_fieldsets = [
         (
             'Payment Info',
-            {'fields': ['person', 'payment_type', 'date', 'amount', 'memo'],
+            {'fields': ['person', 'payment_type', 'date', 'amount', 'memo','adoption'],
              'expanded': True}),
     ]
 
     edit_fieldsets = [
         (
             'Payment Info',
-            {'fields': ['person', 'payment_type', 'date', 'amount', 'memo'],
+            {'fields': ['person', 'payment_type', 'date', 'amount', 'memo','adoption'],
              'expanded': True}),
     ]
 
@@ -211,6 +211,31 @@ class BreedModelView(ModelView):
              'expanded': True}),
     ]
 
+class AdoptionModelView(ModelView):
+    datamodel = SQLAInterface(Adoption)
+
+    list_columns = ['animal_name']
+    base_order = ('animal_name', 'asc')
+    show_fieldsets = [
+        (
+            'Adoption Info',
+            {'fields': ['animal_name', 'person_name','memo'],
+             'expanded': True}),
+        ]
+
+    add_fieldsets = [
+        (
+            'Adoption Info',
+            {'fields': ['animal_name', 'person_name','memo'],
+             'expanded': True}),
+        ]
+
+    edit_fieldsets = [
+        (
+            'Adoption Info',
+            {'fields': ['animal_name', 'person_name','memo'],
+             'expanded': True}),
+        ]
 
 db.create_all()
 fill_data()
@@ -221,6 +246,7 @@ appbuilder.add_view(PaymentModelView, "Payments", icon="fa-money", category='Cus
 
 appbuilder.add_view(BreedModelView, "Breed", icon="fa-paw", category='Animal Management')
 appbuilder.add_view(AnimalModelView, "Animal", icon="fa-paw", category='Animal Management')
+appbuilder.add_view(AdoptionModelView, "Adoption", icon="fa-paw", category='Animal Management')
 
 appbuilder.add_link("Save-A-Pet", href="http://www.saveapetli.net/", icon="fa-paw")
 

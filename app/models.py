@@ -41,8 +41,9 @@ class Payment(Model):
     payment_type = relationship("PaymentType")  # Class name
     date = Column(Date, nullable=True)
     amount = Column(Integer, nullable=True)
+    adoption_id = Column(Integer, ForeignKey('adoption.id'), nullable=True)
+    adoption = relationship("Adoption")
     memo = Column(String(564))
-
 
     def __repr__(self):
         return self.name
@@ -113,6 +114,18 @@ class Animal(Model):
     breed_type = relationship("Breed")
 
 
+    memo = Column(String(564))
+
+    def __repr__(self):
+        return self.name
+
+
+class Adoption(Model):
+    id = Column(Integer, primary_key=True)
+    animal_id = Column(Integer, ForeignKey('animal.id'), nullable=False)
+    animal_name = relationship("Animal")
+    person_id = Column(Integer, ForeignKey('person.id'), nullable=False)
+    person_name = relationship("Person")
     memo = Column(String(564))
 
     def __repr__(self):

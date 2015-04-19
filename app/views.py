@@ -259,6 +259,32 @@ class AdoptionModelView(ModelView):
              'expanded': True}),
         ]
 
+class AnimalTypeModelView(ModelView):
+    datamodel = SQLAInterface(AnimalType)
+
+    list_columns = ['animal_type']
+    base_order = ('animal_type', 'asc')
+    show_fieldsets = [
+        (
+            'Summary',
+            {'fields': ['animal_type'],
+             'expanded': True}),
+        ]
+
+    add_fieldsets = [
+        (
+            'Summary',
+            {'fields': ['animal_type'],
+             'expanded': True}),
+        ]
+
+    edit_fieldsets = [
+        (
+            'Summary',
+            {'fields': ['animal_type'],
+             'expanded': True}),
+        ]
+
 db.create_all()
 fill_data()
 appbuilder.add_view(VetModelView, "Vets", icon="fa-building-o")
@@ -266,9 +292,10 @@ appbuilder.add_view(VetModelView, "Vets", icon="fa-building-o")
 appbuilder.add_view(PersonModelView, "People", icon="fa-users", category='Customers')
 appbuilder.add_view(PaymentModelView, "Payments", icon="fa-money", category='Customers')
 
-appbuilder.add_view(BreedModelView, "Breed", icon="fa-paw", category='Animal Management')
-appbuilder.add_view(AnimalModelView, "Animal", icon="fa-paw", category='Animal Management')
-appbuilder.add_view(AdoptionModelView, "Adoption", icon="fa-paw", category='Animal Management')
+appbuilder.add_view(AnimalModelView, "Animal", icon="fa-paw", category='Animals')
+appbuilder.add_view(AdoptionModelView, "Adoption", icon="fa-paw", category='Animals')
+appbuilder.add_view(BreedModelView, "Breed", icon="fa-paw", category='Breeds')
+appbuilder.add_view(AnimalTypeModelView, "Animal Type", icon="fa-paw", category='Breeds')
 
 appbuilder.add_link("Save-A-Pet", href="http://www.saveapetli.net/", icon="fa-paw")
 

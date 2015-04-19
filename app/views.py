@@ -8,7 +8,7 @@ from flask.ext.babelpkg import lazy_gettext as _
 import os
 
 from app import db, appbuilder
-from .models import Vet, State, Person, Payment, PaymentType, Breed, Animal, Adoption
+from .models import Vet, State, Person, Payment, PaymentType, Breed, Animal, Adoption, AnimalType
 
 
 def fill_data():
@@ -34,6 +34,16 @@ def fill_data():
         for payment_type in payment_type_list:
             db.session.add(PaymentType(payment_type=payment_type['payment_type'],
                                        is_credit_card=payment_type['is_credit_card']))
+            db.session.commit()
+    except:
+        db.session.rollback()
+
+    # Import Animal Types
+    try:
+        logging.info('Filling in Animal Types')
+        type_list = json.loads(open('animalTypes.json').read())
+        for type in type_list:
+            db.session.add(AnimalType(animal_type=type))
             db.session.commit()
     except:
         db.session.rollback()

@@ -1,11 +1,14 @@
+from flask.ext.appbuilder.views import MasterDetailView, CompactCRUDMixin
 import logging
 import calendar
 from flask.ext.appbuilder import ModelView, IndexView
 from flask.ext.appbuilder.models.sqla.interface import SQLAInterface
-from flask.ext.appbuilder.charts.views import GroupByChartView
+from flask.ext.appbuilder.charts.views import GroupByChartView, TimeChartView, BaseChartView
 from flask.ext.appbuilder.models.group import aggregate_count
 from flask.ext.babelpkg import lazy_gettext as _
 import os
+
+from flask.ext.appbuilder.models.datamodel import SQLAModel
 
 from app import db, appbuilder
 from .models import Vet, State, Person, Payment, PaymentType, Breed, Animal, Adoption, AnimalType
@@ -284,9 +287,20 @@ class AnimalTypeModelView(ModelView):
              'expanded': True}),
         ]
 
+
+class BreedMasterView(MasterDetailView):
+    datamodel = SQLAModel(Breed)
+    related_views = [AnimalModelView]
+
+class VetMasterView(MasterDetailView):
+    datamodel = SQLAModel(Vet)
+    related_views = [AnimalModelView]
+
+
 db.create_all()
 fill_data()
-appbuilder.add_view(VetModelView, "Vets", icon="fa-building-o")
+appbuilder.add_view(VetModelView, "Vets", icon="fa-building-o", category='Vet')
+appbuilder.add_view(VetMasterView, "Vet Listing", icon="fa-paw", category='Vet')
 
 appbuilder.add_view(PersonModelView, "People", icon="fa-users", category='Customers')
 appbuilder.add_view(PaymentModelView, "Payments", icon="fa-money", category='Customers')
@@ -295,6 +309,8 @@ appbuilder.add_view(AnimalModelView, "Animal", icon="fa-paw", category='Animals'
 appbuilder.add_view(AdoptionModelView, "Adoption", icon="fa-paw", category='Animals')
 appbuilder.add_view(BreedModelView, "Breed", icon="fa-paw", category='Breeds')
 appbuilder.add_view(AnimalTypeModelView, "Animal Type", icon="fa-paw", category='Breeds')
+appbuilder.add_view(BreedMasterView, "List Breeds", icon="fa-paw", category='Breeds')
+
 
 appbuilder.add_link("Save-A-Pet", href="http://www.saveapetli.net/", icon="fa-paw")
 

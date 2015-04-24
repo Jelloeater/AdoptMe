@@ -11,7 +11,7 @@ import os
 from flask.ext.appbuilder.models.datamodel import SQLAModel
 
 from app import db, appbuilder
-from .models import Vet, State, Person, Payment, PaymentType, Breed, Animal, Adoption, AnimalType
+from .models import Vet, State, Person, Payment, PaymentType, Breed, Animal, Adoption, AnimalType, AnimalStatus
 
 
 def fill_data():
@@ -190,23 +190,23 @@ class AnimalModelView(ModelView):
     show_fieldsets = [
         (
             'Summary',
-            {'fields': ['name', 'vet', 'breed_type'],
+            {'fields': ['name', 'animal_status', 'vet', 'breed_type'],
              'expanded': True}),
     ]
 
     add_fieldsets = [
         (
             'Summary',
-            {'fields': ['name', 'vet', 'breed_type'],
+            {'fields': ['name', 'animal_status', 'vet', 'breed_type'],
              'expanded': True}),
-    ]
+        ]
 
     edit_fieldsets = [
         (
             'Summary',
-            {'fields': ['name', 'vet', 'breed_type'],
+            {'fields': ['name', 'animal_status', 'vet', 'breed_type'],
              'expanded': True}),
-    ]
+        ]
 
 
 class BreedModelView(ModelView):
@@ -238,7 +238,7 @@ class BreedModelView(ModelView):
 class AdoptionModelView(ModelView):
     datamodel = SQLAInterface(Adoption)
 
-    list_columns = ['animal_name']
+    list_columns = ['animal_name', 'person_name', 'memo']
     base_order = ('id', 'asc')
     show_fieldsets = [
         (
@@ -287,6 +287,31 @@ class AnimalTypeModelView(ModelView):
              'expanded': True}),
         ]
 
+class StatusModelView(ModelView):
+    datamodel = SQLAInterface(AnimalStatus)
+
+    list_columns = ['status']
+    base_order = ('status', 'asc')
+    show_fieldsets = [
+        (
+            'Summary',
+            {'fields': ['status'],
+             'expanded': True}),
+        ]
+
+    add_fieldsets = [
+        (
+            'Summary',
+            {'fields': ['status'],
+             'expanded': True}),
+        ]
+
+    edit_fieldsets = [
+        (
+            'Summary',
+            {'fields': ['status'],
+             'expanded': True}),
+        ]
 
 class BreedMasterView(MasterDetailView):
     datamodel = SQLAModel(Breed)
@@ -296,6 +321,9 @@ class VetMasterView(MasterDetailView):
     datamodel = SQLAModel(Vet)
     related_views = [AnimalModelView]
 
+class StatusMasterView(MasterDetailView):
+    datamodel = SQLAModel(AnimalStatus)
+    related_views = [AnimalModelView]
 
 db.create_all()
 fill_data()
@@ -307,6 +335,9 @@ appbuilder.add_view(PaymentModelView, "Payments", icon="fa-money", category='Cus
 
 appbuilder.add_view(AnimalModelView, "Animal", icon="fa-paw", category='Animals')
 appbuilder.add_view(AdoptionModelView, "Adoption", icon="fa-paw", category='Animals')
+appbuilder.add_view(StatusModelView, "Status", icon="fa-paw", category='Animals')
+appbuilder.add_view(StatusMasterView, "List Status", icon="fa-paw", category='Animals')
+
 appbuilder.add_view(BreedModelView, "Breed", icon="fa-paw", category='Breeds')
 appbuilder.add_view(AnimalTypeModelView, "Animal Type", icon="fa-paw", category='Breeds')
 appbuilder.add_view(BreedMasterView, "List Breeds", icon="fa-paw", category='Breeds')

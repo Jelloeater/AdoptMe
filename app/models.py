@@ -105,11 +105,20 @@ class Breed(Model):
         return self.breed
 
 
+class AnimalStatus(Model):
+    id = Column(Integer, primary_key=True)
+    status = Column(String(64), unique=True, nullable=False)
+
+    def __repr__(self):
+        return self.status
+
 class Animal(Model):
     id = Column(Integer, primary_key=True)
     vet_id = Column(Integer, ForeignKey('vet.id'), nullable=True)
     vet = relationship("Vet")
     name = Column(String(150), unique=True, nullable=False)
+    status_id = Column(Integer, ForeignKey('animal_status.id'), nullable=False)
+    animal_status = relationship("AnimalStatus")
     breed_id = Column(Integer, ForeignKey('breed.id'), nullable=False)
     breed_type = relationship("Breed")
     # FIXME Add medial history
@@ -122,7 +131,7 @@ class Animal(Model):
 
 class Adoption(Model):
     id = Column(Integer, primary_key=True)
-    animal_id = Column(Integer, ForeignKey('animal.id'), nullable=False)
+    animal_id = Column(Integer, ForeignKey('animal.id'), nullable=False, unique=True)
     animal_name = relationship("Animal")
     person_id = Column(Integer, ForeignKey('person.id'), nullable=False)
     person_name = relationship("Person")

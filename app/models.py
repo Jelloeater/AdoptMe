@@ -131,13 +131,14 @@ class Animal(Model):
 
 class AnimalHistory(Model):
     id = Column(Integer, primary_key=True)
-    animal_id = Column(Integer, ForeignKey('animal.id'), nullable=False, unique=True)
+    animal_id = Column(Integer, ForeignKey('animal.id'), nullable=False, unique=False)
     animal_name = relationship("Animal")
     person_id = Column(Integer, ForeignKey('person.id'), nullable=False)
     person_name = relationship("Person")
     status_id = Column(Integer, ForeignKey('animal_status.id'), nullable=False)
     animal_status = relationship("AnimalStatus")
-
+    start_date = Column(Date, nullable=False)
+    end_date = Column(Date, nullable=True)
     memo = Column(String(564))
 
     def __repr__(self):

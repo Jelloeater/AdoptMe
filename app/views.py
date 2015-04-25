@@ -238,26 +238,26 @@ class BreedModelView(ModelView):
 class AnimalHistoryModelView(ModelView):
     datamodel = SQLAInterface(AnimalHistory)
 
-    list_columns = ['animal_name', 'person_name', 'memo']
+    list_columns = ['id','animal_name', 'person_name','animal_status','start_date','end_date','memo']
     base_order = ('id', 'asc')
     show_fieldsets = [
         (
             'Animal History Info',
-            {'fields': ['id','animal_name', 'person_name','animal_status','memo'],
+            {'fields': ['animal_name', 'person_name','animal_status','start_date','end_date','memo'],
              'expanded': True}),
         ]
 
     add_fieldsets = [
         (
             'Animal History Info',
-            {'fields': ['animal_name', 'person_name','animal_status','memo'],
+            {'fields': ['animal_name', 'person_name','animal_status','start_date','end_date','memo'],
              'expanded': True}),
         ]
 
     edit_fieldsets = [
         (
             'Animal History Info',
-            {'fields': ['animal_name', 'person_name','animal_status','memo'],
+            {'fields': ['animal_name', 'person_name','animal_status','start_date','end_date','memo'],
              'expanded': True}),
         ]
 
@@ -287,7 +287,7 @@ class AnimalTypeModelView(ModelView):
              'expanded': True}),
         ]
 
-class StatusModelView(ModelView):
+class AnimalStatusModelView(ModelView):
     datamodel = SQLAInterface(AnimalStatus)
 
     list_columns = ['status']
@@ -334,8 +334,8 @@ appbuilder.add_view(PersonModelView, "People", icon="fa-users", category='Custom
 appbuilder.add_view(PaymentModelView, "Payments", icon="fa-money", category='Customers')
 
 appbuilder.add_view(AnimalModelView, "Animal", icon="fa-paw", category='Animals')
-appbuilder.add_view(AnimalHistoryModelView, "AnimalHistory", icon="fa-paw", category='Animals')
-appbuilder.add_view(StatusModelView, "Status", icon="fa-paw", category='Animals')
+appbuilder.add_view(AnimalHistoryModelView, "Animal History", icon="fa-paw", category='Animals')
+appbuilder.add_view(AnimalStatusModelView, "Edit Status", icon="fa-paw", category='Animals')
 appbuilder.add_view(StatusMasterView, "List Status", icon="fa-paw", category='Animals')
 
 appbuilder.add_view(BreedModelView, "Breed", icon="fa-paw", category='Breeds')

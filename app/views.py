@@ -190,21 +190,21 @@ class AnimalModelView(ModelView):
     show_fieldsets = [
         (
             'Summary',
-            {'fields': ['name', 'animal_status', 'vet', 'breed_type'],
+            {'fields': ['name', 'vet', 'breed_type'],
              'expanded': True}),
     ]
 
     add_fieldsets = [
         (
             'Summary',
-            {'fields': ['name', 'animal_status', 'vet', 'breed_type'],
+            {'fields': ['name', 'vet', 'breed_type'],
              'expanded': True}),
         ]
 
     edit_fieldsets = [
         (
             'Summary',
-            {'fields': ['name', 'animal_status', 'vet', 'breed_type'],
+            {'fields': ['name', 'vet', 'breed_type'],
              'expanded': True}),
         ]
 
@@ -238,26 +238,26 @@ class BreedModelView(ModelView):
 class AnimalHistoryModelView(ModelView):
     datamodel = SQLAInterface(AnimalHistory)
 
-    list_columns = ['animal_name', 'person_name', 'memo']
+    list_columns = ['id','animal_name', 'person_name', 'memo']
     base_order = ('id', 'asc')
     show_fieldsets = [
         (
             'Animal History Info',
-            {'fields': ['id','animal_name', 'person_name','memo'],
+            {'fields': ['animal_name', 'person_name','animal_status','memo'],
              'expanded': True}),
         ]
 
     add_fieldsets = [
         (
             'Animal History Info',
-            {'fields': ['animal_name', 'person_name','memo'],
+            {'fields': ['animal_name', 'person_name','animal_status','memo'],
              'expanded': True}),
         ]
 
     edit_fieldsets = [
         (
             'Animal History Info',
-            {'fields': ['animal_name', 'person_name','memo'],
+            {'fields': ['animal_name', 'person_name','animal_status','memo'],
              'expanded': True}),
         ]
 

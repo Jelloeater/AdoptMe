@@ -11,7 +11,7 @@ import os
 from flask.ext.appbuilder.models.datamodel import SQLAModel
 
 from app import db, appbuilder
-from .models import Vet, State, Person, Payment, PaymentType, Breed, Animal, Adoption, AnimalType, AnimalStatus
+from .models import Vet, State, Person, Payment, PaymentType, Breed, Animal, AnimalHistory, AnimalType, AnimalStatus
 
 
 def fill_data():
@@ -235,28 +235,28 @@ class BreedModelView(ModelView):
              'expanded': True}),
     ]
 
-class AdoptionModelView(ModelView):
-    datamodel = SQLAInterface(Adoption)
+class AnimalHistoryModelView(ModelView):
+    datamodel = SQLAInterface(AnimalHistory)
 
     list_columns = ['animal_name', 'person_name', 'memo']
     base_order = ('id', 'asc')
     show_fieldsets = [
         (
-            'Adoption Info',
+            'Animal History Info',
             {'fields': ['id','animal_name', 'person_name','memo'],
              'expanded': True}),
         ]
 
     add_fieldsets = [
         (
-            'Adoption Info',
+            'Animal History Info',
             {'fields': ['animal_name', 'person_name','memo'],
              'expanded': True}),
         ]
 
     edit_fieldsets = [
         (
-            'Adoption Info',
+            'Animal History Info',
             {'fields': ['animal_name', 'person_name','memo'],
              'expanded': True}),
         ]
@@ -334,7 +334,7 @@ appbuilder.add_view(PersonModelView, "People", icon="fa-users", category='Custom
 appbuilder.add_view(PaymentModelView, "Payments", icon="fa-money", category='Customers')
 
 appbuilder.add_view(AnimalModelView, "Animal", icon="fa-paw", category='Animals')
-appbuilder.add_view(AdoptionModelView, "Adoption", icon="fa-paw", category='Animals')
+appbuilder.add_view(AnimalHistoryModelView, "AnimalHistory", icon="fa-paw", category='Animals')
 appbuilder.add_view(StatusModelView, "Status", icon="fa-paw", category='Animals')
 appbuilder.add_view(StatusMasterView, "List Status", icon="fa-paw", category='Animals')
 

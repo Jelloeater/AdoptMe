@@ -45,7 +45,7 @@ Person = Table('Person', metadata,
                Column('email', String(50)),
                Column('memo', String(200)))
 
-Adoption = Table('Adoption', metadata,
+Adoption = Table('AnimalHistory', metadata,
                  Column('adoption_ID', Integer, primary_key=True),
                  Column('animal_ID', None, ForeignKey('Animal.animal_ID'), nullable=False),
                  Column('person_ID', None, ForeignKey('Person.person_ID'), nullable=False),

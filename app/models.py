@@ -1,5 +1,5 @@
 import datetime
-from sqlalchemy import Column, Integer, String, ForeignKey, Date, Boolean, Numeric
+from sqlalchemy import Column, Integer, String, ForeignKey, Date, Boolean
 from sqlalchemy.orm import relationship
 from flask.ext.appbuilder import Model
 
@@ -41,8 +41,8 @@ class Payment(Model):
     payment_type = relationship("PaymentType")  # Class name
     date = Column(Date, nullable=True)
     amount = Column(Integer, nullable=True)
-    adoption_id = Column(Integer, ForeignKey('adoption.id'), nullable=True)
-    adoption = relationship("Adoption")
+    adoption_id = Column(Integer, ForeignKey('animal_history.id'), nullable=True)
+    adoption = relationship("AnimalHistory")
     memo = Column(String(564))
 
     def __repr__(self):
@@ -112,6 +112,7 @@ class AnimalStatus(Model):
     def __repr__(self):
         return self.status
 
+
 class Animal(Model):
     id = Column(Integer, primary_key=True)
     vet_id = Column(Integer, ForeignKey('vet.id'), nullable=True)
@@ -129,12 +130,14 @@ class Animal(Model):
         return self.name
 
 
-class Adoption(Model):
+class AnimalHistory(Model):
     id = Column(Integer, primary_key=True)
     animal_id = Column(Integer, ForeignKey('animal.id'), nullable=False, unique=True)
     animal_name = relationship("Animal")
     person_id = Column(Integer, ForeignKey('person.id'), nullable=False)
     person_name = relationship("Person")
+
+
     memo = Column(String(564))
 
     def __repr__(self):

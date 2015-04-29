@@ -22,13 +22,13 @@ class State(Model):
         return self.name
 
 
-class PaymentType(Model):
+class PaymentMethod(Model):
     id = Column(Integer, primary_key=True)
-    payment_type = Column(String(50), unique=True, nullable=False)
+    payment_method = Column(String(50), unique=True, nullable=False)
     is_credit_card = Column(Boolean, nullable=False)
 
     def __repr__(self):
-        return self.payment_type # Needs to return a field
+        return self.payment_method # Needs to return a field
 
 
 class Payment(Model):
@@ -36,9 +36,9 @@ class Payment(Model):
     person_id = Column(Integer, ForeignKey('person.id'), nullable=False)
     person = relationship("Person")
 
-    payment_type_id = Column(Integer, ForeignKey('payment_type.id'), nullable=False)
+    payment_method_id = Column(Integer, ForeignKey('payment_method.id'), nullable=False)
     # Logical SQL name, won't always match
-    payment_type = relationship("PaymentType")  # Class name
+    payment_method = relationship("PaymentMethod")  # Class name
     date = Column(Date, nullable=True)
     amount = Column(Integer, nullable=True)
     adoption_id = Column(Integer, ForeignKey('animal_history.id'), nullable=True)

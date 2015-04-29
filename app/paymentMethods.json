@@ -1,31 +1,31 @@
 [
     {
-        "payment_type": "Mastercard",
+        "payment_method": "Mastercard",
         "is_credit_card": true
     }
     ,
     {
-        "payment_type": "Visa",
+        "payment_method": "Visa",
         "is_credit_card": true
     }
     ,
     {
-        "payment_type": "American Express",
+        "payment_method": "American Express",
         "is_credit_card": true
     }
     ,
     {
-        "payment_type": "Discover",
+        "payment_method": "Discover",
         "is_credit_card": true
     }
     ,
     {
-        "payment_type": "Check",
+        "payment_method": "Check",
         "is_credit_card": false
     }
     ,
     {
-        "payment_type": "Cash",
+        "payment_method": "Cash",
         "is_credit_card": false
     }
 ]

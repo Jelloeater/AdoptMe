@@ -1,3 +1,4 @@
+from flask.ext.appbuilder.models.sqla.filters import FilterStartsWith
 from flask.ext.appbuilder.views import MasterDetailView, CompactCRUDMixin
 import logging
 import calendar
@@ -11,7 +12,8 @@ import os
 from flask.ext.appbuilder.models.datamodel import SQLAModel
 
 from app import db, appbuilder
-from .models import Vet, State, Person, Payment, PaymentType, Breed, Animal, AnimalHistory, AnimalType, AnimalStatus
+from .models import Vet, State, Person, Payment, Breed, Animal, AnimalHistory, AnimalType, AnimalStatus, \
+    PaymentMethod
 
 
 def fill_data():
@@ -32,11 +34,11 @@ def fill_data():
 
     # Import Payment methods
     try:
-        logging.info('Filling in Payment Types')
-        payment_type_list = json.loads(open('paymentTypes.json').read())
-        for payment_type in payment_type_list:
-            db.session.add(PaymentType(payment_type=payment_type['payment_type'],
-                                       is_credit_card=payment_type['is_credit_card']))
+        logging.info('Filling in Payment Methods')
+        payment_method_list = json.loads(open('paymentMethods.json').read())
+        for payment_method in payment_method_list:
+            db.session.add(PaymentMethod(payment_method=payment_method['payment_method'],
+                                       is_credit_card=payment_method['is_credit_card']))
             db.session.commit()
     except:
         db.session.rollback()
@@ -75,7 +77,9 @@ class VetModelView(ModelView):
     datamodel = SQLAInterface(Vet)
 
     list_columns = ['name', 'work_phone', 'memo']
+    search_columns = ['name', 'work_phone','email', 'zipcode', 'memo']
     base_order = ('name', 'asc')
+
     show_fieldsets = [
         ('Summary', {'fields': ['name', 'memo']}),
         (
@@ -117,6 +121,7 @@ class PersonModelView(ModelView):
     datamodel = SQLAInterface(Person)
 
     list_columns = ['name', 'work_phone', 'home_phone', 'mobile_phone', 'memo']
+    search_columns = ['name', 'work_phone', 'home_phone', 'mobile_phone', 'zipcode', 'memo']
     base_order = ('name', 'asc')
     show_fieldsets = [
         ('Summary', {'fields': ['name', 'memo']}),
@@ -158,26 +163,27 @@ class PersonModelView(ModelView):
 class PaymentModelView(ModelView):
     datamodel = SQLAInterface(Payment)
 
-    list_columns = ['person', 'payment_type', 'date', 'amount', 'memo','adoption']
+    # TODO Add search columns to rest of views
+    list_columns = ['person', 'payment_method', 'date', 'amount', 'memo','adoption']
     base_order = ('date', 'asc')
     show_fieldsets = [
         (
             'Payment Info',
-            {'fields': ['person', 'payment_type', 'date', 'amount', 'memo','adoption'],
+            {'fields': ['person', 'payment_method', 'date', 'amount', 'memo','adoption'],
              'expanded': True}),
     ]
 
     add_fieldsets = [
         (
             'Payment Info',
-            {'fields': ['person', 'payment_type', 'date', 'amount', 'memo','adoption'],
+            {'fields': ['person', 'payment_method', 'date', 'amount', 'memo','adoption'],
              'expanded': True}),
     ]
 
     edit_fieldsets = [
         (
             'Payment Info',
-            {'fields': ['person', 'payment_type', 'date', 'amount', 'memo','adoption'],
+            {'fields': ['person', 'payment_method', 'date', 'amount', 'memo','adoption'],
              'expanded': True}),
     ]
 
@@ -239,6 +245,7 @@ class AnimalHistoryModelView(ModelView):
     datamodel = SQLAInterface(AnimalHistory)
 
     list_columns = ['id','animal_name', 'person_name','animal_status','start_date','end_date','memo']
+    search_columns = ['animal_name', 'person_name','animal_status','start_date','end_date','memo']
     base_order = ('id', 'asc')
     show_fieldsets = [
         (

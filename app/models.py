@@ -22,6 +22,14 @@ class State(Model):
         return self.name
 
 
+class PaymentType(Model):
+    id = Column(Integer, primary_key=True)
+    payment_type = Column(String(50), unique=True, nullable=False)
+
+    def __repr__(self):
+        return self.payment_type # Needs to return a field
+
+
 class PaymentMethod(Model):
     id = Column(Integer, primary_key=True)
     payment_method = Column(String(50), unique=True, nullable=False)
@@ -35,10 +43,11 @@ class Payment(Model):
     id = Column(Integer, primary_key=True)
     person_id = Column(Integer, ForeignKey('person.id'), nullable=False)
     person = relationship("Person")
-
     payment_method_id = Column(Integer, ForeignKey('payment_method.id'), nullable=False)
-    # Logical SQL name, won't always match
+    # Logical SQL name, won't always match (ex payment_method = PaymentMethod)
     payment_method = relationship("PaymentMethod")  # Class name
+    payment_type_id = Column(Integer, ForeignKey('payment_type.id'), nullable=False)
+    payment_type = relationship("PaymentType")
     date = Column(Date, nullable=True)
     amount = Column(Integer, nullable=True)
     adoption_id = Column(Integer, ForeignKey('animal_history.id'), nullable=True)
@@ -137,8 +146,7 @@ class AnimalHistory(Model):
     person_name = relationship("Person")
     status_id = Column(Integer, ForeignKey('animal_status.id'), nullable=False)
     animal_status = relationship("AnimalStatus")
-    start_date = Column(Date, nullable=False)
-    end_date = Column(Date, nullable=True)
+    date = Column(Date, nullable=False) #No need for end date, we have multiple status for that
     memo = Column(String(564))
 
     def __repr__(self):

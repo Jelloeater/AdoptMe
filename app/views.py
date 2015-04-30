@@ -13,7 +13,7 @@ from flask.ext.appbuilder.models.datamodel import SQLAModel
 
 from app import db, appbuilder
 from .models import Vet, State, Person, Payment, Breed, Animal, AnimalHistory, AnimalType, AnimalStatus, \
-    PaymentMethod
+    PaymentMethod, PaymentType
 
 
 def fill_data():
@@ -60,6 +60,26 @@ def fill_data():
         for breed in breed_list:
             db.session.add(Breed(breed=breed['breed'],
                                  type_id=breed['type_id']))
+            db.session.commit()
+    except:
+        db.session.rollback()
+
+    # Import paymentTypes methods
+    try:
+        logging.info('Filling in Payment Types')
+        list_in = json.loads(open('paymentTypes.json').read())
+        for item in list_in:
+            db.session.add(PaymentType(payment_type=item))
+            db.session.commit()
+    except:
+        db.session.rollback()
+
+    # Import animalStatus methods
+    try:
+        logging.info('Filling in Animal Status')
+        list_in = json.loads(open('animalStatus.json').read())
+        for item in list_in:
+            db.session.add(AnimalStatus(status=item))
             db.session.commit()
     except:
         db.session.rollback()
@@ -164,26 +184,26 @@ class PaymentModelView(ModelView):
     datamodel = SQLAInterface(Payment)
 
     # TODO Add search columns to rest of views
-    list_columns = ['person', 'payment_method', 'date', 'amount', 'memo','adoption']
+    list_columns = ['person', 'payment_method','payment_type', 'date', 'amount', 'memo','adoption']
     base_order = ('date', 'asc')
     show_fieldsets = [
         (
             'Payment Info',
-            {'fields': ['person', 'payment_method', 'date', 'amount', 'memo','adoption'],
+            {'fields': ['person', 'payment_method', 'payment_type', 'date', 'amount', 'memo','adoption'],
              'expanded': True}),
     ]
 
     add_fieldsets = [
         (
             'Payment Info',
-            {'fields': ['person', 'payment_method', 'date', 'amount', 'memo','adoption'],
+            {'fields': ['person', 'payment_method', 'payment_type', 'date', 'amount', 'memo','adoption'],
              'expanded': True}),
     ]
 
     edit_fieldsets = [
         (
             'Payment Info',
-            {'fields': ['person', 'payment_method', 'date', 'amount', 'memo','adoption'],
+            {'fields': ['person', 'payment_method', 'payment_type', 'date', 'amount', 'memo','adoption'],
              'expanded': True}),
     ]
 
@@ -191,12 +211,12 @@ class PaymentModelView(ModelView):
 class AnimalModelView(ModelView):
     datamodel = SQLAInterface(Animal)
 
-    list_columns = ['name']
+    list_columns = ['id','name', 'vet', 'breed_type']
     base_order = ('name', 'asc')
     show_fieldsets = [
         (
             'Summary',
-            {'fields': ['name' 'vet', 'breed_type'],
+            {'fields': ['id','name', 'vet', 'breed_type'],
              'expanded': True}),
     ]
 
@@ -244,27 +264,28 @@ class BreedModelView(ModelView):
 class AnimalHistoryModelView(ModelView):
     datamodel = SQLAInterface(AnimalHistory)
 
-    list_columns = ['id','animal_name', 'person_name','animal_status','start_date','end_date','memo']
-    search_columns = ['animal_name', 'person_name','animal_status','start_date','end_date','memo']
+    list_columns = ['id','animal_id','animal_name', 'person_name','animal_status','date','memo']
+    search_columns = ['animal_name', 'person_name','animal_status','date','memo']
     base_order = ('id', 'asc')
+    # Animal ID's must be used as there can be multiple ones with the same name
     show_fieldsets = [
         (
             'Animal History Info',
-            {'fields': ['animal_name', 'person_name','animal_status','start_date','end_date','memo'],
+            {'fields': ['animal_id','animal_name', 'person_name','animal_status','date','memo'],
              'expanded': True}),
         ]
 
     add_fieldsets = [
         (
             'Animal History Info',
-            {'fields': ['animal_name', 'person_name','animal_status','start_date','end_date','memo'],
+            {'fields': ['animal_id','person_name','animal_status','date','memo'],
              'expanded': True}),
         ]
 
     edit_fieldsets = [
         (
             'Animal History Info',
-            {'fields': ['animal_name', 'person_name','animal_status','start_date','end_date','memo'],
+            {'fields': ['animal_id', 'person_name','animal_status','date','memo'],
              'expanded': True}),
         ]
 

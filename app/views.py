@@ -13,7 +13,7 @@ from flask.ext.appbuilder.models.datamodel import SQLAModel
 
 from app import db, appbuilder
 from .models import Vet, State, Person, Payment, Breed, Animal, AnimalHistory, AnimalType, AnimalStatus, \
-    PaymentMethod, PaymentType
+    PaymentMethod#, PaymentType
 
 
 def fill_data():
@@ -65,14 +65,14 @@ def fill_data():
         db.session.rollback()
 
     # Import paymentTypes methods
-    try:
-        logging.info('Filling in Payment Types')
-        list_in = json.loads(open('paymentTypes.json').read())
-        for item in list_in:
-            db.session.add(PaymentType(payment_type=item))
-            db.session.commit()
-    except:
-        db.session.rollback()
+    # try:
+    #     logging.info('Filling in Payment Types')
+    #     list_in = json.loads(open('paymentTypes.json').read())
+    #     for item in list_in:
+    #         db.session.add(PaymentType(payment_type=item))
+    #         db.session.commit()
+    # except:
+    #     db.session.rollback()
 
     # Import animalStatus methods
     try:
@@ -184,28 +184,28 @@ class PaymentModelView(ModelView):
     datamodel = SQLAInterface(Payment)
 
     # TODO Add search columns to rest of views
-    list_columns = ['person', 'payment_method','payment_type', 'date', 'amount', 'memo','adoption']
-    base_order = ('date', 'asc')
-    show_fieldsets = [
-        (
-            'Payment Info',
-            {'fields': ['person', 'payment_method', 'payment_type', 'date', 'amount', 'memo','adoption'],
-             'expanded': True}),
-    ]
-
-    add_fieldsets = [
-        (
-            'Payment Info',
-            {'fields': ['person', 'payment_method', 'payment_type', 'date', 'amount', 'memo','adoption'],
-             'expanded': True}),
-    ]
-
-    edit_fieldsets = [
-        (
-            'Payment Info',
-            {'fields': ['person', 'payment_method', 'payment_type', 'date', 'amount', 'memo','adoption'],
-             'expanded': True}),
-    ]
+    # list_columns = ['person', 'payment_method','payment_type', 'date', 'amount', 'memo','adoption']
+    # base_order = ('date', 'asc')
+    # show_fieldsets = [
+    #     (
+    #         'Payment Info',
+    #         {'fields': ['person', 'payment_method', 'payment_type', 'date', 'amount', 'memo','adoption'],
+    #          'expanded': True}),
+    # ]
+    #
+    # add_fieldsets = [
+    #     (
+    #         'Payment Info',
+    #         {'fields': ['person', 'payment_method', 'payment_type', 'date', 'amount', 'memo','adoption'],
+    #          'expanded': True}),
+    # ]
+    #
+    # edit_fieldsets = [
+    #     (
+    #         'Payment Info',
+    #         {'fields': ['person', 'payment_method', 'payment_type', 'date', 'amount', 'memo','adoption'],
+    #          'expanded': True}),
+    # ]
 
 
 class AnimalModelView(ModelView):

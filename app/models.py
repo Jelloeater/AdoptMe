@@ -22,12 +22,12 @@ class State(Model):
         return self.name
 
 # FIXME Re-enable PaymentType
-# class PaymentType(Model):
-#     id = Column(Integer, primary_key=True)
-#     payment_type = Column(String(50), unique=True, nullable=False)
-#
-#     def __repr__(self):
-#         return self.payment_type # Needs to return a field
+class PaymentType(Model):
+    id = Column(Integer, primary_key=True)
+    payment_type = Column(String(50), unique=True, nullable=False)
+
+    def __repr__(self):
+        return self.payment_type # Needs to return a field
 
 
 class PaymentMethod(Model):
@@ -46,8 +46,8 @@ class Payment(Model):
     payment_method_id = Column(Integer, ForeignKey('payment_method.id'), nullable=False)
     # Logical SQL name, won't always match (ex payment_method = PaymentMethod)
     payment_method = relationship("PaymentMethod")  # Class name
-    # payment_type_id = Column(Integer, ForeignKey('payment_type.id'), nullable=False)
-    # payment_type = relationship("PaymentType")
+    payment_type_id = Column(Integer, ForeignKey('payment_type.id'), nullable=False)
+    payment_type = relationship("PaymentType")
     date = Column(Date, nullable=True)
     amount = Column(Integer, nullable=True)
     animal_history_fk_id = Column(Integer, ForeignKey('animal_history.id'), nullable=True)

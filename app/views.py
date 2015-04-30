@@ -13,7 +13,7 @@ from flask.ext.appbuilder.models.datamodel import SQLAModel
 
 from app import db, appbuilder
 from .models import Vet, State, Person, Payment, Breed, Animal, AnimalHistory, AnimalType, AnimalStatus, \
-    PaymentMethod#, PaymentType
+    PaymentMethod, PaymentType  # , PaymentType
 
 
 def fill_data():
@@ -38,7 +38,7 @@ def fill_data():
         payment_method_list = json.loads(open('paymentMethods.json').read())
         for payment_method in payment_method_list:
             db.session.add(PaymentMethod(payment_method=payment_method['payment_method'],
-                                       is_credit_card=payment_method['is_credit_card']))
+                                         is_credit_card=payment_method['is_credit_card']))
             db.session.commit()
     except:
         db.session.rollback()
@@ -65,14 +65,14 @@ def fill_data():
         db.session.rollback()
 
     # Import paymentTypes methods
-    # try:
-    #     logging.info('Filling in Payment Types')
-    #     list_in = json.loads(open('paymentTypes.json').read())
-    #     for item in list_in:
-    #         db.session.add(PaymentType(payment_type=item))
-    #         db.session.commit()
-    # except:
-    #     db.session.rollback()
+    try:
+        logging.info('Filling in Payment Types')
+        list_in = json.loads(open('paymentTypes.json').read())
+        for item in list_in:
+            db.session.add(PaymentType(payment_type=item))
+            db.session.commit()
+    except:
+        db.session.rollback()
 
     # Import animalStatus methods
     try:
@@ -97,7 +97,7 @@ class VetModelView(ModelView):
     datamodel = SQLAInterface(Vet)
 
     list_columns = ['name', 'work_phone', 'memo']
-    search_columns = ['name', 'work_phone','email', 'zipcode', 'memo']
+    search_columns = ['name', 'work_phone', 'email', 'zipcode', 'memo']
     base_order = ('name', 'asc')
 
     show_fieldsets = [
@@ -183,56 +183,55 @@ class PersonModelView(ModelView):
 class PaymentModelView(ModelView):
     datamodel = SQLAInterface(Payment)
 
-    # TODO Add search columns to rest of views
-    # list_columns = ['person', 'payment_method','payment_type', 'date', 'amount', 'memo','adoption']
-    # base_order = ('date', 'asc')
-    # show_fieldsets = [
-    #     (
-    #         'Payment Info',
-    #         {'fields': ['person', 'payment_method', 'payment_type', 'date', 'amount', 'memo','adoption'],
-    #          'expanded': True}),
-    # ]
-    #
-    # add_fieldsets = [
-    #     (
-    #         'Payment Info',
-    #         {'fields': ['person', 'payment_method', 'payment_type', 'date', 'amount', 'memo','adoption'],
-    #          'expanded': True}),
-    # ]
-    #
-    # edit_fieldsets = [
-    #     (
-    #         'Payment Info',
-    #         {'fields': ['person', 'payment_method', 'payment_type', 'date', 'amount', 'memo','adoption'],
-    #          'expanded': True}),
-    # ]
+    list_columns = ['person_id', 'person', 'payment_method', 'payment_type', 'date', 'amount', 'memo', 'animal_history_fk_id']
+    base_order = ('date', 'asc')
+    show_fieldsets = [
+        (
+            'Payment Info',
+            {'fields': ['person_id', 'person' 'payment_method', 'payment_type', 'date', 'amount', 'memo', 'animal_history_fk_id'],
+             'expanded': True}),
+    ]
+
+    add_fieldsets = [
+        (
+            'Payment Info',
+            {'fields': ['person_id', 'payment_method', 'payment_type', 'date', 'amount', 'memo', 'animal_history_fk_id'],
+             'expanded': True}),
+    ]
+
+    edit_fieldsets = [
+        (
+            'Payment Info',
+            {'fields': ['person_id', 'payment_method', 'payment_type', 'date', 'amount', 'memo', 'animal_history_fk_id'],
+             'expanded': True}),
+    ]
 
 
 class AnimalModelView(ModelView):
     datamodel = SQLAInterface(Animal)
 
-    list_columns = ['id','name', 'vet', 'breed_type']
+    list_columns = ['id', 'name', 'vet', 'breed_type']
     base_order = ('name', 'asc')
     show_fieldsets = [
         (
             'Summary',
-            {'fields': ['id','name', 'vet', 'breed_type'],
+            {'fields': ['id', 'name', 'vet', 'breed_type'],
              'expanded': True}),
     ]
 
     add_fieldsets = [
         (
             'Summary',
-            {'fields': ['name','vet', 'breed_type'],
+            {'fields': ['name', 'vet', 'breed_type'],
              'expanded': True}),
-        ]
+    ]
 
     edit_fieldsets = [
         (
             'Summary',
             {'fields': ['name', 'vet', 'breed_type'],
              'expanded': True}),
-        ]
+    ]
 
 
 class BreedModelView(ModelView):
@@ -261,33 +260,35 @@ class BreedModelView(ModelView):
              'expanded': True}),
     ]
 
+
 class AnimalHistoryModelView(ModelView):
     datamodel = SQLAInterface(AnimalHistory)
 
-    list_columns = ['id','animal_id','animal_name', 'person_name','animal_status','date','memo']
-    search_columns = ['animal_name', 'person_name','animal_status','date','memo']
+    list_columns = ['id', 'animal_id', 'animal_name', 'person_name', 'animal_status', 'date', 'memo']
+    search_columns = ['animal_name', 'person_name', 'animal_status', 'date', 'memo']
     base_order = ('id', 'asc')
     # Animal ID's must be used as there can be multiple ones with the same name
     show_fieldsets = [
         (
             'Animal History Info',
-            {'fields': ['animal_id','animal_name', 'person_name','animal_status','date','memo'],
+            {'fields': ['animal_id', 'animal_name', 'person_name', 'animal_status', 'date', 'memo'],
              'expanded': True}),
-        ]
+    ]
 
     add_fieldsets = [
         (
             'Animal History Info',
-            {'fields': ['animal_id','person_name','animal_status','date','memo'],
+            {'fields': ['animal_id', 'person_name', 'animal_status', 'date', 'memo'],
              'expanded': True}),
-        ]
+    ]
 
     edit_fieldsets = [
         (
             'Animal History Info',
-            {'fields': ['animal_id', 'person_name','animal_status','date','memo'],
+            {'fields': ['animal_id', 'person_name', 'animal_status', 'date', 'memo'],
              'expanded': True}),
-        ]
+    ]
+
 
 class AnimalTypeModelView(ModelView):
     datamodel = SQLAInterface(AnimalType)
@@ -299,21 +300,22 @@ class AnimalTypeModelView(ModelView):
             'Summary',
             {'fields': ['animal_type'],
              'expanded': True}),
-        ]
+    ]
 
     add_fieldsets = [
         (
             'Summary',
             {'fields': ['animal_type'],
              'expanded': True}),
-        ]
+    ]
 
     edit_fieldsets = [
         (
             'Summary',
             {'fields': ['animal_type'],
              'expanded': True}),
-        ]
+    ]
+
 
 class AnimalStatusModelView(ModelView):
     datamodel = SQLAInterface(AnimalStatus)
@@ -325,33 +327,37 @@ class AnimalStatusModelView(ModelView):
             'Summary',
             {'fields': ['status'],
              'expanded': True}),
-        ]
+    ]
 
     add_fieldsets = [
         (
             'Summary',
             {'fields': ['status'],
              'expanded': True}),
-        ]
+    ]
 
     edit_fieldsets = [
         (
             'Summary',
             {'fields': ['status'],
              'expanded': True}),
-        ]
+    ]
+
 
 class BreedMasterView(MasterDetailView):
     datamodel = SQLAModel(Breed)
     related_views = [AnimalModelView]
 
+
 class VetMasterView(MasterDetailView):
     datamodel = SQLAModel(Vet)
     related_views = [AnimalModelView]
 
+
 class StatusMasterView(MasterDetailView):
     datamodel = SQLAModel(AnimalStatus)
     related_views = [AnimalHistoryModelView]
+
 
 db.create_all()
 fill_data()
@@ -369,7 +375,6 @@ appbuilder.add_view(StatusMasterView, "List Status", icon="fa-paw", category='An
 appbuilder.add_view(BreedModelView, "Breed", icon="fa-paw", category='Breeds')
 appbuilder.add_view(AnimalTypeModelView, "Animal Type", icon="fa-paw", category='Breeds')
 appbuilder.add_view(BreedMasterView, "List Breeds", icon="fa-paw", category='Breeds')
-
 
 appbuilder.add_link("Save-A-Pet", href="http://www.saveapetli.net/", icon="fa-paw")
 

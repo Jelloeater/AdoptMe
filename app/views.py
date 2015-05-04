@@ -294,6 +294,31 @@ class BreedModelView(ModelView):
              'expanded': True}),
     ]
 
+class ColorModelView(ModelView):
+    datamodel = SQLAInterface(Color)
+
+    list_columns = ['animal_color']
+    base_order = ('animal_color', 'asc')
+    show_fieldsets = [
+        (
+            'Breed Name',
+            {'fields': ['animal_color'],
+             'expanded': True}),
+        ]
+
+    add_fieldsets = [
+        (
+            'Breed Name',
+            {'fields': ['animal_color'],
+             'expanded': True}),
+        ]
+
+    edit_fieldsets = [
+        (
+            'Breed Name',
+            {'fields': ['animal_color'],
+             'expanded': True}),
+        ]
 
 class AnimalHistoryModelView(ModelView):
     datamodel = SQLAInterface(AnimalHistory)
@@ -407,11 +432,13 @@ appbuilder.add_view(PaymentModelView, "Payments", icon="fa-money", category='Cus
 appbuilder.add_view(AnimalModelView, "Animal", icon="fa-paw", category='Animals')
 appbuilder.add_view(AnimalHistoryModelView, "Animal History", icon="fa-paw", category='Animals')
 appbuilder.add_view(AnimalStatusModelView, "Edit Status", icon="fa-paw", category='Animals')
+appbuilder.add_view(ColorModelView, "Edit Colors", icon="fa-paw", category='Animals')
 appbuilder.add_view(StatusMasterView, "List Status", icon="fa-paw", category='Animals')
 
 appbuilder.add_view(BreedModelView, "Breed", icon="fa-paw", category='Breeds')
 appbuilder.add_view(AnimalTypeModelView, "Animal Type", icon="fa-paw", category='Breeds')
 appbuilder.add_view(BreedMasterView, "List Breeds", icon="fa-paw", category='Breeds')
+
 
 appbuilder.add_link("Save-A-Pet", href="http://www.saveapetli.net/", icon="fa-paw")
 

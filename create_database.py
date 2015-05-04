@@ -8,7 +8,7 @@ __author__ = 'Jesse'
 # DATERANGE, TSRANGE, TSTZRANGE, TSVECTOR
 # http://docs.sqlalchemy.org/en/rel_0_9/core/tutorial.html
 
-
+# NOTE This is only to be used with pure SQLalchemy, not FAB
 from sqlalchemy import Table, Column, Integer, String, Boolean, Numeric, SmallInteger, TIMESTAMP, ForeignKey, \
     create_engine, MetaData, Date
 

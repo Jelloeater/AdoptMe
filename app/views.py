@@ -13,11 +13,10 @@ from flask.ext.appbuilder.models.datamodel import SQLAModel
 
 from app import db, appbuilder
 from .models import Vet, State, Person, Payment, Breed, Animal, AnimalHistory, AnimalType, AnimalStatus, \
-    PaymentMethod, PaymentType  # , PaymentType
+    PaymentMethod, PaymentType, Color, Sex  # , PaymentType
 
 
 def fill_data():
-    # FIXME Only the first method call is getting executed on the DB
     import json
     # Import States
     try:
@@ -53,6 +52,26 @@ def fill_data():
     except:
         db.session.rollback()
 
+    # Import Animal Types
+    try:
+        logging.info('Filling in Colors')
+        color_list = json.loads(open('colors.json').read())
+        for color_item in color_list:
+            db.session.add(Color(animal_color=color_item))
+            db.session.commit()
+    except:
+        db.session.rollback()
+
+    # Import Animal Types
+    try:
+        logging.info('Filling in Sex')
+        color_list = json.loads(open('sex.json').read())
+        for sex_item in color_list:
+            db.session.add(Sex(animal_sex=sex_item))
+            db.session.commit()
+    except:
+        db.session.rollback()
+
     # Import Breeds methods
     try:
         logging.info('Filling in Breeds')
@@ -68,8 +87,8 @@ def fill_data():
     try:
         logging.info('Filling in Payment Types')
         list_in = json.loads(open('paymentTypes.json').read())
-        for item in list_in:
-            db.session.add(PaymentType(payment_type=item))
+        for sex in list_in:
+            db.session.add(PaymentType(payment_type=sex))
             db.session.commit()
     except:
         db.session.rollback()
@@ -78,8 +97,8 @@ def fill_data():
     try:
         logging.info('Filling in Animal Status')
         list_in = json.loads(open('animalStatus.json').read())
-        for item in list_in:
-            db.session.add(AnimalStatus(status=item))
+        for sex in list_in:
+            db.session.add(AnimalStatus(status=sex))
             db.session.commit()
     except:
         db.session.rollback()
@@ -210,27 +229,42 @@ class PaymentModelView(ModelView):
 class AnimalModelView(ModelView):
     datamodel = SQLAInterface(Animal)
 
-    list_columns = ['id', 'name', 'vet', 'breed_type']
+    list_columns = ['id', 'name', 'vet', 'breed_type','sex','color']
     base_order = ('name', 'asc')
     show_fieldsets = [
         (
             'Summary',
-            {'fields': ['id', 'name', 'vet', 'breed_type'],
+            {'fields': ['id', 'name', 'vet', 'breed_type','sex','color'],
              'expanded': True}),
+        (
+            'Medical History',
+            {'fields': ['spay_nut_date', 'dh_date', 'hwt_date', 'rabies_date', 'fvrcp_date', 'leuk_date',
+                        'stool_date', 'stool_result', 'heart_guard_date', 'has_aids', 'birth_date', 'death_date',],
+             'expanded': True})
     ]
 
     add_fieldsets = [
         (
             'Summary',
-            {'fields': ['name', 'vet', 'breed_type'],
+            {'fields': ['name', 'vet', 'breed_type','sex','color'],
              'expanded': True}),
+        (
+            'Medical History',
+            {'fields': ['spay_nut_date', 'dh_date', 'hwt_date', 'rabies_date', 'fvrcp_date', 'leuk_date',
+                        'stool_date', 'stool_result', 'heart_guard_date', 'has_aids', 'birth_date', 'death_date',],
+             'expanded': True})
     ]
 
     edit_fieldsets = [
         (
             'Summary',
-            {'fields': ['name', 'vet', 'breed_type'],
+            {'fields': ['name', 'vet', 'breed_type','sex','color'],
              'expanded': True}),
+        (
+            'Medical History',
+            {'fields': ['spay_nut_date', 'dh_date', 'hwt_date', 'rabies_date', 'fvrcp_date', 'leuk_date',
+                        'stool_date', 'stool_result', 'heart_guard_date', 'has_aids', 'birth_date', 'death_date',],
+             'expanded': True})
     ]
 
 
@@ -270,23 +304,26 @@ class AnimalHistoryModelView(ModelView):
     # Animal ID's must be used as there can be multiple ones with the same name
     show_fieldsets = [
         (
-            'Animal History Info',
+            'Basic Info',
             {'fields': ['animal_id', 'animal_name', 'person_name', 'animal_status', 'date', 'memo'],
              'expanded': True}),
     ]
 
+
     add_fieldsets = [
         (
-            'Animal History Info',
-            {'fields': ['animal_id', 'person_name', 'animal_status', 'date', 'memo'],
+            'Basic Info',
+            {'fields': ['animal_id', 'animal_name', 'person_name', 'animal_status', 'date', 'memo'],
              'expanded': True}),
+
     ]
 
     edit_fieldsets = [
         (
-            'Animal History Info',
-            {'fields': ['animal_id', 'person_name', 'animal_status', 'date', 'memo'],
+            'Basic Info',
+            {'fields': ['animal_id', 'animal_name', 'person_name', 'animal_status', 'date', 'memo'],
              'expanded': True}),
+
     ]
 
 

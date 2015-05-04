@@ -21,7 +21,6 @@ class State(Model):
     def __repr__(self):
         return self.name
 
-# FIXME Re-enable PaymentType
 class PaymentType(Model):
     id = Column(Integer, primary_key=True)
     payment_type = Column(String(50), unique=True, nullable=False)
@@ -59,7 +58,6 @@ class Payment(Model):
 
 
 class Vet(Model):
-    # TODO Add fields for proper model (take from create_database.py)
     id = Column(Integer, primary_key=True)
     name = Column(String(150), unique=True, nullable=False)
     address = Column(String(564), nullable=False)
@@ -104,6 +102,24 @@ class AnimalType(Model):
         return self.animal_type
 
 
+class Sex(Model):
+    # 1 = Male
+    # 2 = Female
+    id = Column(Integer, primary_key=True)
+    animal_sex = Column(String(50), unique=True, nullable=False)
+
+    def __repr__(self):
+        return self.animal_sex
+
+
+class Color(Model):
+    id = Column(Integer, primary_key=True)
+    animal_color = Column(String(50), unique=True, nullable=False)
+
+    def __repr__(self):
+        return self.animal_color
+
+
 class Breed(Model):
     id = Column(Integer, primary_key=True)
     breed = Column(String(64), unique=True, nullable=False)
@@ -130,7 +146,25 @@ class Animal(Model):
 
     breed_id = Column(Integer, ForeignKey('breed.id'), nullable=False)
     breed_type = relationship("Breed")
-    # FIXME Add medial history
+
+    sex_id = Column(Integer, ForeignKey('sex.id'), nullable=False)
+    sex = relationship("Sex")
+
+    color_id = Column(Integer, ForeignKey('color.id'), nullable=True)
+    color = relationship("Color")
+
+    spay_nut_date = Column(Date, nullable=True)
+    dh_date = Column(Date, nullable=True)
+    hwt_date = Column(Date, nullable=True)
+    rabies_date = Column(Date, nullable=True)
+    fvrcp_date = Column(Date, nullable=True)
+    leuk_date = Column(Date, nullable=True)
+    stool_date = Column(Date, nullable=True)
+    stool_result = Column(Boolean, nullable=True)
+    heart_guard_date = Column(Date, nullable=True)
+    has_aids = Column(Boolean, nullable=True)
+    birth_date = Column(Date, nullable=True)
+    death_date = Column(Date, nullable=True)
 
     memo = Column(String(564))
 

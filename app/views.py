@@ -313,7 +313,7 @@ class AnimalHistoryModelView(ModelView):
     add_fieldsets = [
         (
             'Basic Info',
-            {'fields': ['animal_id', 'animal_name', 'person_name', 'animal_status', 'date', 'memo'],
+            {'fields': ['animal_id', 'person_id', 'animal_status', 'date', 'memo'],
              'expanded': True}),
 
     ]
@@ -321,7 +321,7 @@ class AnimalHistoryModelView(ModelView):
     edit_fieldsets = [
         (
             'Basic Info',
-            {'fields': ['animal_id', 'animal_name', 'person_name', 'animal_status', 'date', 'memo'],
+            {'fields': ['animal_id', 'person_id', 'animal_status', 'date', 'memo'],
              'expanded': True}),
 
     ]

@@ -5,15 +5,6 @@ from flask.ext.appbuilder import Model
 
 mindate = datetime.date(datetime.MINYEAR, 1, 1)
 
-
-class ContactGroup(Model):
-    id = Column(Integer, primary_key=True)
-    name = Column(String(50), unique=True, nullable=False)
-
-    def __repr__(self):
-        return self.name
-
-
 class State(Model):
     id = Column(Integer, primary_key=True)
     name = Column(String(50), unique=True, nullable=False)

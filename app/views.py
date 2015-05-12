@@ -87,8 +87,8 @@ def fill_data():
     try:
         logging.info('Filling in Payment Types')
         list_in = json.loads(open('paymentTypes.json').read())
-        for sex in list_in:
-            db.session.add(PaymentType(payment_type=sex))
+        for patment_item in list_in:
+            db.session.add(PaymentType(payment_type=patment_item))
             db.session.commit()
     except:
         db.session.rollback()
@@ -97,8 +97,8 @@ def fill_data():
     try:
         logging.info('Filling in Animal Status')
         list_in = json.loads(open('animalStatus.json').read())
-        for sex in list_in:
-            db.session.add(AnimalStatus(status=sex))
+        for status_item in list_in:
+            db.session.add(AnimalStatus(status=status_item))
             db.session.commit()
     except:
         db.session.rollback()

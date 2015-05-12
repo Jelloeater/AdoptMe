@@ -1,5 +1,4 @@
 # AdoptMe
-
 An animal management database
 
 ## Requirements
@@ -14,7 +13,6 @@ apt-get install postgresql-server-dev-* python-psycopg2 postgresql postgresql-cl
 pip install flask-appbuilder
 
 configure DB permissions and users
-rop
 
 Create db 'adoptme'
 
@@ -24,15 +22,9 @@ SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:postgres@localhost:5432/adoptme
 *NOTE* it is a good idea to pick a strong password, as this is just for testing
 
 run 'run.py'
-
-shutdown server
-
 cd to App folder
-
 fabmanager create-admin
 Create admin user
-
 login to web GUI with admin credentials
-
 Create users
 
